@@ -108,3 +108,4 @@ gen### VisualStudioCode template
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.scannerwork/

@@ -2,6 +2,12 @@ language: java
 
 jdk: oraclejdk8
 
+addons:
+  sonarcloud:
+    organization: istic-m2-ila-gm
+    token:
+      secure: e/yARBIuHIJXfRySzbSLWAeIu652kaZ8ElWZyavAB5XBZlpJX4AneV5jXBGRtlAnka77KaR1uL9f/pE3Itnchvdz1P12VFWTxFWkNFe2c4Ms0zkieAdAF//4k8p81G6mfKP8y4U0Jf2dqjj3+SNc4Dn2aoYZvL2mcpT0hPQiY4wjlE6qI12A72IfnUDgR6zr28qw7IkPho6LLwac8Qk3lL8qNJ2n6gP2OX05YsmSSv+XRAxZ5EpTwEg4HCsiB8ziqixFhaih4UcIfJ2q6OS/y1j3cdpwL11EgSrvvz104a8jj77hcKx/IAPRUFGYnb8N3DGm9fNgMviZdR8hgWBFWbRc7CHNo9L0PJVHUe/T8TTSeisKz/Id67KLw8nBS9eQUE3/ljuEN9HcvQLB2uwNWYIodLYgjougax9VyVft/0zlcLaKjYUhFpGkpmsEToST8/++CbB8UeYGZX8G7Dn6gtib0iD+Cl1Lcz0ZcAn+nvWXbL8Ix+WXSRqkhJk9gmR5RCUpPI3cFspS9t82ey0DYrzEbH9mh+1o8sVvkRp+xExU5PuAdKdCY7pz+a4/f2ulsktpfbH5cxUly+NQHDtVt654xj/rfW6UhEmD5DFJR7OrAlnuYAIzsjQkeI4e3X131kOWJ+BiLb0ZuHZ4b0v7RiboVEwo5/zcyymUZZcsMq8=
+
 cache:
   directories:
   - "$HOME/.m2/repository"
@@ -9,5 +15,5 @@ cache:
 
 jobs:
   include:
-  - script: mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify
-    name: Unit, Integration Tests & Quality
+  - script: mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify && sonar-scanner
+    name: Unit & Quality
