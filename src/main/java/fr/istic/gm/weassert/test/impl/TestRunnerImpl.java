@@ -5,6 +5,7 @@ import fr.istic.gm.weassert.test.TestRunner;
 import lombok.extern.java.Log;
 import org.junit.runner.JUnitCore;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -37,6 +38,12 @@ public class TestRunnerImpl implements TestRunner {
 
 
     private URL mapToUrl(String a) {
-        return getClass().getResource(a);
+        try {
+            return new URL(a);
+        } catch (MalformedURLException e) {
+            String message = String.format(PARSED_ERROR, e.getCause());
+            log.info(message);
+            throw new RuntimeException(message, e);
+        }
     }
 }
