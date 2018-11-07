@@ -5,11 +5,7 @@
 
     <groupId>fr.istic.gm</groupId>
     <artifactId>we-assert</artifactId>
-    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>fake</module>
-    </modules>
     <name>WeAssert</name>
 
     <inceptionYear>2018</inceptionYear>
