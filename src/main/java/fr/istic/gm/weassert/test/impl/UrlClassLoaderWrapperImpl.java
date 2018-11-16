@@ -14,11 +14,12 @@ import java.util.List;
 @Log
 public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
 
-    private static final String LOAD_CLASS_ERROR = "Can't load class: %s";
-    private static final String PARSED_ERROR = "Url can't be parsed: %s";
+    public static final String LOAD_CLASS_ERROR = "Can't load class: ";
+    public static final String PARSED_ERROR = "Url can't be parsed: ";
 
     @Getter
     private List<Class<?>> classList;
+
     private URLClassLoader urlClassLoader;
 
     public UrlClassLoaderWrapperImpl(List<String> paths, List<String> classNames) {
@@ -32,7 +33,7 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
         try {
             return new URL(a);
         } catch (MalformedURLException e) {
-            String message = String.format(PARSED_ERROR, e.getCause());
+            String message = PARSED_ERROR + e.getCause();
             log.info(message);
             throw new WeAssertException(message, e);
         }
@@ -42,7 +43,7 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
         try {
             classList.add(urlClassLoader.loadClass(className));
         } catch (ClassNotFoundException e) {
-            String message = String.format(LOAD_CLASS_ERROR, e.getCause());
+            String message = LOAD_CLASS_ERROR + e.getCause();
             log.info(message);
             throw new WeAssertException(message, e);
         }

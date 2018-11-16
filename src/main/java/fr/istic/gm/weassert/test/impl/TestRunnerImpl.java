@@ -10,12 +10,11 @@ import java.util.List;
 @Log
 public class TestRunnerImpl implements TestRunner {
 
-    private RunListener runListener;
     private JUnitCore jUnitCore;
 
     public TestRunnerImpl(JUnitCore jUnitCore, RunListener runListener) {
-        this.runListener = runListener;
         this.jUnitCore = jUnitCore;
+        this.jUnitCore.addListener(runListener);
     }
 
     @Override
@@ -25,7 +24,6 @@ public class TestRunnerImpl implements TestRunner {
 
     @Override
     public void startTest(Class<?> clazz) {
-        jUnitCore.addListener(runListener);
         jUnitCore.run(clazz);
     }
 }
