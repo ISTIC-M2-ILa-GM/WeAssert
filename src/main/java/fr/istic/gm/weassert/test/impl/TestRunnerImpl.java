@@ -5,51 +5,27 @@ import lombok.extern.java.Log;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.RunListener;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 @Log
 public class TestRunnerImpl implements TestRunner {
 
-    private static final String LOAD_CLASS_ERROR = "Can't load class: %s";
-    private static final String PARSED_ERROR = "Url can't be parsed: %s";
-
     private RunListener runListener;
+    private JUnitCore jUnitCore;
 
-    public TestRunnerImpl(RunListener runListener) {
+    public TestRunnerImpl(JUnitCore jUnitCore, RunListener runListener) {
         this.runListener = runListener;
+        this.jUnitCore = jUnitCore;
     }
 
     @Override
-    public void startTest(List<String> paths, List<String> classNames) {
-        URL[] urls = paths.stream().map(this::mapToUrl).toArray(URL[]::new);
-        URLClassLoader urlClassLoader = URLClassLoader.newInstance(urls);
-        classNames.forEach(c -> startTest(c, urlClassLoader));
+    public void startTests(List<Class<?>> classes) {
+        classes.forEach(this::startTest);
     }
 
-    private void startTest(String className, URLClassLoader urlClassLoader) {
-        try {
-            Class<?> clazz = urlClassLoader.loadClass(className);
-            JUnitCore core = new JUnitCore();
-            core.addListener(runListener);
-            core.run(clazz);
-        } catch (ClassNotFoundException e) {
-            String message = String.format(LOAD_CLASS_ERROR, e.getCause());
-            log.info(message);
-            throw new RuntimeException(message, e);
-        }
-    }
-
-
-    private URL mapToUrl(String a) {
-        try {
-            return new URL(a);
-        } catch (MalformedURLException e) {
-            String message = String.format(PARSED_ERROR, e.getCause());
-            log.info(message);
-            throw new RuntimeException(message, e);
-        }
+    @Override
+    public void startTest(Class<?> clazz) {
+        jUnitCore.addListener(runListener);
+        jUnitCore.run(clazz);
     }
 }

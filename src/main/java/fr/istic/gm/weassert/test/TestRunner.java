@@ -3,5 +3,6 @@ package fr.istic.gm.weassert.test;
 import java.util.List;
 
 public interface TestRunner {
-    void startTest(List<String> paths, List<String> classNames);
+    void startTests(List<Class<?>> classes);
+    void startTest(Class<?> classes);
 }
