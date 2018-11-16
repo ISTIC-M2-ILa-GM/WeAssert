@@ -1,4 +1,4 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.impl;
 
 import lombok.extern.java.Log;
 import org.junit.runner.Description;
