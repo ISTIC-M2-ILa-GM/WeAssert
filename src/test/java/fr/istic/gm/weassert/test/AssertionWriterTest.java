@@ -1,5 +1,6 @@
 package fr.istic.gm.weassert.test;
 
+import fr.istic.gm.weassert.TestData;
 import fr.istic.gm.weassert.test.impl.AssertionWriterImpl;
 import fr.istic.gm.weassert.test.model.Assertion;
 import org.junit.Before;
@@ -14,11 +15,7 @@ public class AssertionWriterTest {
 
     @Before
     public void setUp() {
-        String actualValue = "monObjet.getTruc()";
-        String expectedValue = "true";
-
-
-        this.assertion = new Assertion(actualValue, expectedValue);
+        this.assertion = TestData.some(Assertion.class);
 
         this.assertionWriter = new AssertionWriterImpl();
     }
