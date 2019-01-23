@@ -22,7 +22,10 @@ public class AssertionWriterTest {
 
     @Test
     public void insert() {
+        String clazz = "fr/istic/gm/weassert/test/impl/AssertionWriterImpl";
+         // String clazz = "fr/istic/gm/weassert/test/impl/AssertionWriterImpl";
 
+        this.assertionWriter.insert(clazz, "testAge", null);
     }
 
     @Test
