@@ -5,6 +5,8 @@ package fr.istic.gm.weassert.test.exception;
  */
 public class WeAssertException extends RuntimeException {
 
+    public static final String WRONG_CLASS_PATH = "The class path is wrong.";
+
     public WeAssertException(String message) {
         super(message);
     }
