@@ -1,5 +1,6 @@
 package fr.istic.gm.weassert.test.analyser;
 
+import fr.istic.gm.weassert.test.analyser.impl.LocalVariableParserImpl;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
@@ -32,7 +33,7 @@ public class LocalVariableParserTest {
     public void setUp() throws Exception {
         when(mockClassReaderFactory.create(any())).thenReturn(new ClassReader(getClass().getName()));
 
-        localVariableParser = new LocalVariableParser(mockClassReaderFactory, getClass(), new ClassNode());
+        localVariableParser = new LocalVariableParserImpl(mockClassReaderFactory, getClass(), new ClassNode());
     }
 
     @Test
