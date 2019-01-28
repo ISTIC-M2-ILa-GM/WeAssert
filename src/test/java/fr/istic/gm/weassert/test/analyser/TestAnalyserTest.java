@@ -4,7 +4,7 @@ import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.TestRunner;
 import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
-import fr.istic.gm.weassert.test.model.MethodAnalysed;
+import fr.istic.gm.weassert.test.model.TestAnalysed;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +61,7 @@ public class TestAnalyserTest {
         when(mockLocalVariableParser.parse()).thenReturn(asList(fakeLocalVariableParsed, fakeLocalVariableParsed1));
         when(mockLocalVariableParser.getClazz()).thenReturn(getClass());
 
-        List<MethodAnalysed> result = testAnalyser.analyse();
+        List<TestAnalysed> result = testAnalyser.analyse();
 
         String expectedCompleteMethodName = getClass().getName() + "a-name" + "a-desc";
 

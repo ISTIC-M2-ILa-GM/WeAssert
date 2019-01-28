@@ -6,7 +6,7 @@ import fr.istic.gm.weassert.test.analyser.CodeVisitor;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.analyser.TestAnalyser;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
-import fr.istic.gm.weassert.test.model.MethodAnalysed;
+import fr.istic.gm.weassert.test.model.TestAnalysed;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class TestAnalyserImpl implements TestAnalyser {
     private TestRunner testRunner;
 
     @Override
-    public List<MethodAnalysed> analyse() {
+    public List<TestAnalysed> analyse() {
         List<LocalVariableParsed> parse = localVariableParser.parse();
         parse.forEach(p ->
                 p.getLocalVariables().forEach(v ->

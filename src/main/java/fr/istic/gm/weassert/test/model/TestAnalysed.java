@@ -12,7 +12,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MethodAnalysed {
+public class TestAnalysed {
 
     private Class clazz;
 
