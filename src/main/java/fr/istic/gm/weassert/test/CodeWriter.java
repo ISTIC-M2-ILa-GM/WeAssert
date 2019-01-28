@@ -3,5 +3,7 @@ package fr.istic.gm.weassert.test;
 import java.util.List;
 
 public interface CodeWriter {
-    void insertMany(String methodName, List<String> codes);
+    void insertOne(String methodName, String desc, String code);
+    void insertMany(String methodName, String desc, List<String> codes);
+    void writeAndCloseFile();
 }
