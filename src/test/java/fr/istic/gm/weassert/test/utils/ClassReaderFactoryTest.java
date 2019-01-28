@@ -25,9 +25,4 @@ public class ClassReaderFactoryTest {
 
         assertThat(result, notNullValue());
     }
-
-    @Test(expected = WeAssertException.class)
-    public void shouldThrowExceptionWhenCreateClassReaderWithAWrongPath() {
-        factory.create(getClass());
-    }
 }
