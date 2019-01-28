@@ -1,6 +1,5 @@
 package fr.istic.gm.weassert.test.utils;
 
-import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.utils.impl.ClassReaderFactoryImpl;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import org.junit.Before;

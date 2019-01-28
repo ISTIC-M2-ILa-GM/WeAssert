@@ -10,6 +10,7 @@ import fr.istic.gm.weassert.test.model.TestAnalysed;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 public class TestAnalyserImpl implements TestAnalyser {
@@ -32,6 +33,9 @@ public class TestAnalyserImpl implements TestAnalyser {
                     codeWriter.insertOne(p.getName(), p.getDesc(), String.format("CodeVisitor.INSTANCE.visit(\"%s\", %s)", completeMethodName + " " + v, v));
                 }));
         codeWriter.writeAndCloseFile();
+        testRunner.startTest(localVariableParser.getClazz());
+        Map<String, Object> variableValues = codeVisitor.getVariableValues();
+        codeVisitor.initVariableValues();
         testRunner.startTest(localVariableParser.getClazz());
         return null;
     }
