@@ -1,67 +1,59 @@
 package fr.istic.gm.weassert.test.analyser;
 
-import fr.istic.gm.weassert.fake.Person;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.NotFoundException;
-import javassist.bytecode.BadBytecode;
+import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
+import fr.istic.gm.weassert.test.model.LocalVariableParsed;
+import fr.istic.gm.weassert.test.model.MethodAnalyser;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.assertFalse;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TestAnalyserTest {
 
     private TestAnalyser testAnalyser;
 
+    @Mock
+    private LocalVariableParser mockLocalVariableParser;
+
+    @Mock
+    private CodeWriter mockCodeWriter;
+
+    @Mock
+    private CodeVisitor mockCodeVisitor;
+
+    private LocalVariableParsed fakeLocalVariableParsed;
+
     @Before
     public void setUp() {
-        testAnalyser = new TestAnalyser();
+        testAnalyser = new TestAnalyserImpl(mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, getClass());
+
+        fakeLocalVariableParsed = LocalVariableParsed.builder()
+                .desc("a-desc")
+                .name("a-name")
+                .localVariables(asList("a-var", "a-var1"))
+                .build();
     }
 
     @Test
-    public void shouldRetrieveAllLocalVariables() throws NotFoundException, IOException, BadBytecode {
-        ClassPool pool = ClassPool.getDefault();
-        CtClass cc = pool.get("fr/istic/gm/weassert/test/TestRunnerTest");
-//        BufferedInputStream fin = new BufferedInputStream(new FileInputStream("fake/target/test-classes/fr/istic/gm/weassert/fake/PersonTest.class"));
-//        ClassFile cf = new ClassFile(new DataInputStream(fin));
-//        MethodInfo minfo = cf.getMethod("testAge");
-//        CodeAttribute ca = minfo.getCodeAttribute();
-//        CodeIterator codeIterator = ca.iterator();
-//        while (codeIterator.hasNext()) {
-//            int index = codeIterator.next();
-//            int op = codeIterator.byteAt(index);
-//            System.out.println(Mnemonic.OPCODE[op]);
-//        }
-//        ClassReader reader = new ClassReader("fr/istic/gm/weassert/analyser/TestAnalyserTest");
-//        ClassNode classNode = new ClassNode();
-//        reader.accept(classNode, 0);
-//        for (MethodNode mn : classNode.methods) {
-//            if ("testAge".equals(mn.name)) {
-//                for (LocalVariableNode local : mn.localVariables) {
-//                    System.out.println("Local Variable: " + local.name + " : " + local.desc + " : " + local.signature + " : " + local.index);
-//                    if (!"this".equals(local.name)) {
-//                        mn.visitVarInsn(Opcodes.AASTORE, local.index);
-//                    }
-//                }
-//            }
-//        }
-//        ClassPool pool = ClassPool.getDefault();
-//        CtClass cc = pool.get("test.Rectangle");
-//        cc.setSuperclass(pool.get("test.Point"));
-//        cc.writeFile();
+    public void shouldAnalyse() {
 
-    }
+        when(mockLocalVariableParser.parse()).thenReturn(Collections.singletonList(fakeLocalVariableParsed));
 
-    @Test
-    public void testAge() {
+        List<MethodAnalyser> result = testAnalyser.analyse();
 
-        Person p = new Person();
-        p.setAge(13);
-        p.setName("name");
-
-        assertFalse(p.isAdult());
+        verify(mockLocalVariableParser).parse();
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", "CodeVisitor.INSTANCE.visit(a-var)");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", "CodeVisitor.INSTANCE.visit(a-var1)");
+        verify(mockCodeWriter)
     }
 }
