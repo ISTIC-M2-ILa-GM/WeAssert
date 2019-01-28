@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CodeWriterTest {
+public class CodeWriterITest {
     private CodeWriterImpl codeWriter;
 
     @Before
@@ -23,16 +23,13 @@ public class CodeWriterTest {
     @Test
     public void insertMany() {
         List<String> sourceCode = Arrays.asList(
-                "System.out.println(\"Loco loco\");",
-                "System.out.println(\"Loca loca\");"
+                "System.out.println(\"Hello world\");",
+                "System.out.println(\"Leonard de Vinci\");"
         );
 
-        this.codeWriter.insertMany("truc", sourceCode);
+        this.codeWriter.insertMany("insertMany", "()V", sourceCode);
+        this.codeWriter.writeAndCloseFile();
 
         assertTrue(this.codeWriter.getClassContainer().isFrozen());
-    }
-
-    public void truc() {
-
     }
 }

@@ -27,9 +27,9 @@ public class CodeWriterImpl implements CodeWriter {
         }
     }
 
-    private void insertOne(String methodName, String code) {
+    public void insertOne(String methodName, String desc, String code) {
         try {
-            CtMethod method = this.classContainer.getMethod(methodName, "()V");
+            CtMethod method = this.classContainer.getMethod(methodName, desc);
             try {
                 method.insertAfter(code);
             } catch (CannotCompileException e) {
@@ -43,8 +43,12 @@ public class CodeWriterImpl implements CodeWriter {
     }
 
     @Override
-    public void insertMany(String methodName, List<String> codes) {
-        codes.forEach(src -> this.insertOne(methodName, src));
+    public void insertMany(String methodName, String desc, List<String> codes) {
+        codes.forEach(src -> this.insertOne(methodName, desc, src));
+    }
+
+    @Override
+    public void writeAndCloseFile() {
         try {
             this.classContainer.writeFile();
         } catch (Exception e) {
