@@ -6,6 +6,7 @@ import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import jdk.internal.org.objectweb.asm.tree.MethodNode;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -18,8 +19,12 @@ public class LocalVariableParserImpl implements LocalVariableParser {
 
     private ClassNode classNode;
 
+    @Getter
+    private Class clazz;
+
     public LocalVariableParserImpl(ClassReaderFactory classReaderFactory, Class clazz, ClassNode classNode) {
         this.classReader = classReaderFactory.create(clazz);
+        this.clazz = clazz;
         this.classNode = classNode;
     }
 

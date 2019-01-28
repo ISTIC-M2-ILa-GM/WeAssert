@@ -12,11 +12,13 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MethodAnalyser {
+public class MethodAnalysed {
 
     private Class clazz;
 
     private String methodName;
+
+    private String methodDesc;
 
     Map<String, Object> variableValues = new HashMap<>();
 }

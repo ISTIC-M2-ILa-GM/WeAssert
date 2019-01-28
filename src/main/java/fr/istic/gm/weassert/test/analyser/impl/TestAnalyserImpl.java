@@ -1,11 +1,12 @@
 package fr.istic.gm.weassert.test.analyser.impl;
 
 import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.TestRunner;
 import fr.istic.gm.weassert.test.analyser.CodeVisitor;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.analyser.TestAnalyser;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
-import fr.istic.gm.weassert.test.model.MethodAnalyser;
+import fr.istic.gm.weassert.test.model.MethodAnalysed;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -19,14 +20,19 @@ public class TestAnalyserImpl implements TestAnalyser {
 
     private CodeVisitor codeVisitor;
 
-    private Class clazz;
+    private TestRunner testRunner;
 
     @Override
-    public List<MethodAnalyser> analyse() {
+    public List<MethodAnalysed> analyse() {
         List<LocalVariableParsed> parse = localVariableParser.parse();
-        parse.forEach(v -> {
-            codeWriter.insertOne(v.getName(), v.getDesc(), "CodeVisitor.INSTANCE.visit(");
-        });
+        parse.forEach(p ->
+                p.getLocalVariables().forEach(v ->
+                {
+                    String completeMethodName = localVariableParser.getClazz().getName() + p.getName() + p.getDesc();
+                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("CodeVisitor.INSTANCE.visit(\"%s\", %s)", completeMethodName + " " + v, v));
+                }));
+        codeWriter.writeAndCloseFile();
+        testRunner.startTest(localVariableParser.getClazz());
         return null;
     }
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 
 public interface LocalVariableParser {
 
+    Class getClazz();
+
     List<LocalVariableParsed> parse();
 
 }
