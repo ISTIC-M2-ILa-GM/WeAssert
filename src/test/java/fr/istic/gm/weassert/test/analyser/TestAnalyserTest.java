@@ -48,7 +48,7 @@ public class TestAnalyserTest {
 
     @Before
     public void setUp() {
-        testAnalyser = new TestAnalyserImpl(mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockTestRunner);
+        testAnalyser = new TestAnalyserImpl(CodeVisitor.class, mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockTestRunner);
 
         fakeLocalVariableParsed = LocalVariableParsed.builder()
                 .desc("a-desc")
@@ -64,7 +64,29 @@ public class TestAnalyserTest {
     }
 
     @Test
-    public void shouldAnalyse() {
+    public void shouldCallAllNeedMethodsWhenAnalyse() {
+
+        when(mockLocalVariableParser.parse()).thenReturn(asList(fakeLocalVariableParsed, fakeLocalVariableParsed1));
+        when(mockLocalVariableParser.getClazz()).thenReturn(getClass());
+
+        testAnalyser.analyse();
+
+        String expectedCompleteMethodName = getClass().getName() + "a-name" + "a-desc";
+
+        verify(mockLocalVariableParser).parse();
+        verify(mockLocalVariableParser).getClazz();
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var\", a-var)");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var1\", a-var1)");
+        verify(mockCodeWriter).writeAndCloseFile();
+        verify(mockTestRunner, times(2)).startTest(getClass());
+        verify(mockCodeVisitor, times(2)).getVariableValues();
+        verify(mockCodeVisitor).initVariableValues();
+    }
+
+
+
+    @Test
+    public void shouldReturnAGoodResponseWhenAnalyse() {
 
         VariableDefinition var0 = VariableDefinition.builder().clazz(getClass()).methodName("a-name").methodDesc("a-desc").variableName("var0").build();
         VariableDefinition var1 = VariableDefinition.builder().clazz(getClass()).methodName("a-name").methodDesc("a-desc").variableName("var1").build();
@@ -88,17 +110,6 @@ public class TestAnalyserTest {
         when(mockCodeVisitor.getVariableValues()).thenReturn(firstCall, secondCall);
 
         List<TestAnalysed> result = testAnalyser.analyse();
-
-        String expectedCompleteMethodName = getClass().getName() + "a-name" + "a-desc";
-
-        verify(mockLocalVariableParser).parse();
-        verify(mockLocalVariableParser).getClazz();
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", "CodeVisitor.INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var\", a-var)");
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", "CodeVisitor.INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var1\", a-var1)");
-        verify(mockCodeWriter).writeAndCloseFile();
-        verify(mockTestRunner, times(2)).startTest(getClass());
-        verify(mockCodeVisitor, times(2)).getVariableValues();
-        verify(mockCodeVisitor).initVariableValues();
 
         Map<String, Object> variableValues = new HashMap<>();
         variableValues.put("var0", 0);

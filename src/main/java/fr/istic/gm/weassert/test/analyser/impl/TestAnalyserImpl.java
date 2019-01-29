@@ -19,6 +19,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class TestAnalyserImpl implements TestAnalyser {
 
+    private static final String CODE_VISITOR_INSTANCE = "INSTANCE";
+
+    private Class<CodeVisitor> codeVisitorClass;
+
     private LocalVariableParser localVariableParser;
 
     private CodeWriter codeWriter;
@@ -41,7 +45,7 @@ public class TestAnalyserImpl implements TestAnalyser {
                 p.getLocalVariables().forEach(v ->
                 {
                     String completeMethodName = clazz.getName() + p.getName() + p.getDesc();
-                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("CodeVisitor.INSTANCE.visit(\"%s\", %s)", completeMethodName + " " + v, v));
+                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(\"%s\", %s)", codeVisitorClass.getName(), CODE_VISITOR_INSTANCE, completeMethodName + " " + v, v));
                 }));
         codeWriter.writeAndCloseFile();
     }
