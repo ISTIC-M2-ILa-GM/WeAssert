@@ -2,7 +2,8 @@ package fr.istic.gm.weassert.test;
 
 import fr.istic.gm.weassert.TestRunnerAppTest;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
-import fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl;
+import fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl;
+import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -13,8 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl.LOAD_CLASS_ERROR;
-import static fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl.PARSED_ERROR;
+import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.LOAD_CLASS_ERROR;
+import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.PARSED_ERROR;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;

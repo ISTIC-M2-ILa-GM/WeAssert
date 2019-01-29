@@ -1,6 +1,6 @@
-package fr.istic.gm.weassert.test.impl;
+package fr.istic.gm.weassert.test.utils.impl;
 
-import fr.istic.gm.weassert.test.UrlClassLoaderWrapper;
+import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import lombok.Getter;
 import lombok.extern.java.Log;
