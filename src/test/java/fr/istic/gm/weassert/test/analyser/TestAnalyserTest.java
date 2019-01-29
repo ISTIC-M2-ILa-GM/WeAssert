@@ -71,12 +71,10 @@ public class TestAnalyserTest {
 
         testAnalyser.analyse();
 
-        String expectedCompleteMethodName = getClass().getName() + "a-name" + "a-desc";
-
         verify(mockLocalVariableParser).parse();
         verify(mockLocalVariableParser).getClazz();
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var\", a-var)");
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(\"" + expectedCompleteMethodName + " a-var1\", a-var1)");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var\", a-var)");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var1\", a-var1)");
         verify(mockCodeWriter).writeAndCloseFile();
         verify(mockTestRunner, times(2)).startTest(getClass());
         verify(mockCodeVisitor, times(2)).getVariableValues();

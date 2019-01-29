@@ -44,8 +44,7 @@ public class TestAnalyserImpl implements TestAnalyser {
         parse.forEach(p ->
                 p.getLocalVariables().forEach(v ->
                 {
-                    String completeMethodName = clazz.getName() + p.getName() + p.getDesc();
-                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(\"%s\", %s)", codeVisitorClass.getName(), CODE_VISITOR_INSTANCE, completeMethodName + " " + v, v));
+                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(getClass(), \"%s\", \"%s\", \"%s\", %s)", codeVisitorClass.getName(), CODE_VISITOR_INSTANCE, p.getName(), p.getDesc(), v, v));
                 }));
         codeWriter.writeAndCloseFile();
     }

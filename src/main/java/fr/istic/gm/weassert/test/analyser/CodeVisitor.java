@@ -10,5 +10,5 @@ public interface CodeVisitor {
 
     void initVariableValues();
 
-    void visit(String localVariable);
+    void visit(Class clazz, String methodName, String methodDefinition, String variableName, Object variableValue);
 }
