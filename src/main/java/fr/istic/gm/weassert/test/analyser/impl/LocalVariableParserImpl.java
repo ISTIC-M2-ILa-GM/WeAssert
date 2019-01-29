@@ -30,8 +30,9 @@ public class LocalVariableParserImpl implements LocalVariableParser {
 
     public List<LocalVariableParsed> parse() {
 
+        log.info("LOCAL VARIABLE PARSE...");
         classReader.accept(classNode, 0);
-        return classNode.methods.stream()
+        List<LocalVariableParsed> variableParseds = classNode.methods.stream()
                 .filter(m -> !"<init>".equals(m.name))
                 .map(m -> LocalVariableParsed.builder()
                         .name(m.name)
@@ -39,6 +40,9 @@ public class LocalVariableParserImpl implements LocalVariableParser {
                         .localVariables(retrieveLocalVariables(m))
                         .build())
                 .collect(Collectors.toList());
+        log.info("LOCAL VARIABLE PARSED: " + variableParseds);
+
+        return variableParseds;
     }
 
     private List<String> retrieveLocalVariables(MethodNode methodNode) {

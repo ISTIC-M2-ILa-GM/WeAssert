@@ -1,7 +1,6 @@
 package fr.istic.gm.weassert.test.analyser.impl;
 
 import fr.istic.gm.weassert.test.CodeWriter;
-import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.analyser.CodeVisitor;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.analyser.TestAnalyser;
@@ -9,13 +8,16 @@ import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.model.MethodDefinition;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.model.VariableDefinition;
+import fr.istic.gm.weassert.test.runner.TestRunner;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @AllArgsConstructor
 public class TestAnalyserImpl implements TestAnalyser {
 
@@ -33,10 +35,15 @@ public class TestAnalyserImpl implements TestAnalyser {
 
     @Override
     public List<TestAnalysed> analyse() {
+
+        log.info("ANALYSE...");
         addVisitorToTests();
         Class clazz = localVariableParser.getClazz();
         Map<VariableDefinition, Object> firstVariableValues = runTestsAndRetrieveFistVariableValues(clazz);
-        return createAnalyseResult(firstVariableValues, codeVisitor.getVariableValues());
+        List<TestAnalysed> result = createAnalyseResult(firstVariableValues, codeVisitor.getVariableValues());
+
+        log.info(String.format("ANALYSED: %s", result));
+        return result;
     }
 
     private void addVisitorToTests() {
