@@ -109,3 +109,4 @@ gen### VisualStudioCode template
 !.vscode/launch.json
 !.vscode/extensions.json
 .scannerwork/
+.attach_pid*
