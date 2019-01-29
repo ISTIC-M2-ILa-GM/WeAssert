@@ -1,9 +1,8 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.utils;
 
 import fr.istic.gm.weassert.TestRunnerAppTest;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl;
-import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -44,7 +43,7 @@ public class UrlClassLoaderWrapperTest {
     public void shouldReturnAllClass() {
 
         List<String> paths = Arrays.asList("file://target/classes", "file:///target/test-classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.UrlClassLoaderWrapperTest");
+        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
 
         UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(paths, classNames);
 
@@ -58,7 +57,7 @@ public class UrlClassLoaderWrapperTest {
     public void shouldThrowExceptionWhenWrongPathIsSent() {
 
         List<String> paths = Collections.singletonList("target/classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.UrlClassLoaderWrapperTest");
+        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
 
         thrown.expect(WeAssertException.class);
         thrown.expectMessage(PARSED_ERROR);
