@@ -33,13 +33,13 @@ public class TestAnalyserImpl implements TestAnalyser {
 
     @Override
     public List<TestAnalysed> analyse() {
+        addVisitorToTests();
         Class clazz = localVariableParser.getClazz();
-        addVisitorToTests(clazz);
         Map<VariableDefinition, Object> firstVariableValues = runTestsAndRetrieveFistVariableValues(clazz);
         return createAnalyseResult(firstVariableValues, codeVisitor.getVariableValues());
     }
 
-    private void addVisitorToTests(Class clazz) {
+    private void addVisitorToTests() {
         List<LocalVariableParsed> parse = localVariableParser.parse();
         parse.forEach(p ->
                 p.getLocalVariables().forEach(v ->
