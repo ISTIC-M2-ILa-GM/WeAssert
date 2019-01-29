@@ -1,8 +1,8 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.utils;
 
 import fr.istic.gm.weassert.TestRunnerAppTest;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
-import fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl;
+import fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl.LOAD_CLASS_ERROR;
-import static fr.istic.gm.weassert.test.impl.UrlClassLoaderWrapperImpl.PARSED_ERROR;
+import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.LOAD_CLASS_ERROR;
+import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.PARSED_ERROR;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -43,7 +43,7 @@ public class UrlClassLoaderWrapperTest {
     public void shouldReturnAllClass() {
 
         List<String> paths = Arrays.asList("file://target/classes", "file:///target/test-classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.UrlClassLoaderWrapperTest");
+        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
 
         UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(paths, classNames);
 
@@ -57,7 +57,7 @@ public class UrlClassLoaderWrapperTest {
     public void shouldThrowExceptionWhenWrongPathIsSent() {
 
         List<String> paths = Collections.singletonList("target/classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.UrlClassLoaderWrapperTest");
+        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
 
         thrown.expect(WeAssertException.class);
         thrown.expectMessage(PARSED_ERROR);

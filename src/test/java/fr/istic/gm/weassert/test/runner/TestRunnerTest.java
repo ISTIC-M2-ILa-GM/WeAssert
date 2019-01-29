@@ -1,7 +1,7 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.runner;
 
 import fr.istic.gm.weassert.TestRunnerApp;
-import fr.istic.gm.weassert.test.impl.TestRunnerImpl;
+import fr.istic.gm.weassert.test.runner.impl.TestRunnerImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;

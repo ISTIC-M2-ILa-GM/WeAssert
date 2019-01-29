@@ -1,4 +1,4 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.utils;
 
 import java.util.List;
 

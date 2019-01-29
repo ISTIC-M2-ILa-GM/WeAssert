@@ -1,6 +1,6 @@
-package fr.istic.gm.weassert.test.impl;
+package fr.istic.gm.weassert.test.runner.impl;
 
-import fr.istic.gm.weassert.test.TestRunner;
+import fr.istic.gm.weassert.test.runner.TestRunner;
 import lombok.extern.java.Log;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.RunListener;
