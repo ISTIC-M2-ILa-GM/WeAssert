@@ -3,11 +3,11 @@ package fr.istic.gm.weassert.test.analyser.impl;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
-import jdk.internal.org.objectweb.asm.ClassReader;
-import jdk.internal.org.objectweb.asm.tree.ClassNode;
-import jdk.internal.org.objectweb.asm.tree.MethodNode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +46,6 @@ public class LocalVariableParserImpl implements LocalVariableParser {
     }
 
     private List<String> retrieveLocalVariables(MethodNode methodNode) {
-        return methodNode.localVariables.stream().filter(v -> "this".equals(v.name)).map(v -> v.name).collect(Collectors.toList());
+        return methodNode.localVariables.stream().filter(v -> !"this".equals(v.name)).map(v -> v.name).collect(Collectors.toList());
     }
 }

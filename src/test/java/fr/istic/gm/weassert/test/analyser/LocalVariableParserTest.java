@@ -3,17 +3,18 @@ package fr.istic.gm.weassert.test.analyser;
 import fr.istic.gm.weassert.test.analyser.impl.LocalVariableParserImpl;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
-import jdk.internal.org.objectweb.asm.ClassReader;
-import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -50,9 +51,9 @@ public class LocalVariableParserTest {
 
         assertThat(result, notNullValue());
         assertThat(result, hasSize(3));
-//        assertThat(result.keySet(), hasItem("setUp"));
-//        assertThat(result.keySet(), hasItem("shouldInstanceClassReader"));
-//        assertThat(result.keySet(), hasItem("shouldParseClassReader"));
-//        assertThat(result.get("shouldParseClassReader"), hasItem("result"));
+        assertThat(result.get(0).getName(), equalTo("setUp"));
+        assertThat(result.get(1).getName(), equalTo("shouldInstanceClassReader"));
+        assertThat(result.get(2).getName(), equalTo("shouldParseClassReader"));
+        assertThat(result.get(2).getLocalVariables(), hasItem("result"));
     }
 }

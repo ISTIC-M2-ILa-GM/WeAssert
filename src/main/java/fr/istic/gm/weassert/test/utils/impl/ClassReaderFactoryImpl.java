@@ -2,7 +2,7 @@ package fr.istic.gm.weassert.test.utils.impl;
 
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
-import jdk.internal.org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassReader;
 
 import static fr.istic.gm.weassert.test.exception.WeAssertException.WRONG_CLASS_PATH;
 
