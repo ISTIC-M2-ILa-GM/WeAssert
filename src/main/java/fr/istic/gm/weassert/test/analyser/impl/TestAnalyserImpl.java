@@ -23,8 +23,6 @@ public class TestAnalyserImpl implements TestAnalyser {
 
     private static final String CODE_VISITOR_INSTANCE = "INSTANCE";
 
-    private Class<CodeVisitor> codeVisitorClass;
-
     private LocalVariableParser localVariableParser;
 
     private CodeWriter codeWriter;
@@ -51,7 +49,8 @@ public class TestAnalyserImpl implements TestAnalyser {
         parse.forEach(p ->
                 p.getLocalVariables().forEach(v ->
                 {
-                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(getClass(), \"%s\", \"%s\", \"%s\", %s)", codeVisitorClass.getName(), CODE_VISITOR_INSTANCE, p.getName(), p.getDesc(), v, v));
+                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(getClass(), \"%s\", \"%s\", \"%s\", %s);", codeVisitor.getClass().getName(), CODE_VISITOR_INSTANCE, p.getName(), p.getDesc(), v, v));
+
                 }));
         codeWriter.writeAndCloseFile();
     }

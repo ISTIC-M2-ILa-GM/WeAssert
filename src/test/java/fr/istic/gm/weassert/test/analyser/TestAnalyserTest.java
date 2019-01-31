@@ -48,7 +48,7 @@ public class TestAnalyserTest {
 
     @Before
     public void setUp() {
-        testAnalyser = new TestAnalyserImpl(CodeVisitor.class, mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockTestRunner);
+        testAnalyser = new TestAnalyserImpl(mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockTestRunner);
 
         fakeLocalVariableParsed = LocalVariableParsed.builder()
                 .desc("a-desc")

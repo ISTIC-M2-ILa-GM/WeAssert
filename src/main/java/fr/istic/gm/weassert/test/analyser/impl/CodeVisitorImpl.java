@@ -10,6 +10,8 @@ import java.util.Map;
 @Slf4j
 public class CodeVisitorImpl implements CodeVisitor {
 
+    public static final CodeVisitor INSTANCE = new CodeVisitorImpl();
+
     private Map<VariableDefinition, Object> variableValues;
 
     @Override
