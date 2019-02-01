@@ -2,43 +2,103 @@ package fr.istic.gm.weassert.test.impl;
 
 import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
-import javassist.*;
 import lombok.Getter;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 public class SourceCodeWriter implements CodeWriter {
+    public static final String CLASSNAME_REGEX = "^(private |public |protected |)(static |)class (\\w+)( \\{|)$";
+
+    public static final String METHODNAME_REGEX = "^.*(@Test)(\\r|\\n)*\\s*(private |public |protected |)(static |)(void |)(\\w+)\\s*\\(\\)\\s+\\{$";
+
+    private File sourceFile;
+
+    private String sourceCode;
+
     private String className;
 
-    private CtClass classContainer;
+    public SourceCodeWriter(String classPath) {
+        this.sourceFile = new File(classPath);
 
-    public SourceCodeWriter(Class clazz) {
-        ClassPool pool = ClassPool.getDefault();
+        if (!sourceFile.exists()) {
+            throw new WeAssertException(String.format("SourceCodeWriter: no such source file at: '%s'", classPath));
+        }
 
         try {
-            this.classContainer = pool.get(clazz.getName());
-            this.className = clazz.getName();
-        } catch (NotFoundException e) {
-            throw new WeAssertException(
-                    String.format("CodeWriter: could not find class named %s", clazz.getName()), e
-            );
+            this.sourceCode = new String(Files.readAllBytes(sourceFile.toPath()));
+        } catch (IOException e) {
+            throw new WeAssertException("SourceCodeWriter: could not read source code !");
+        }
+
+        findClassName();
+    }
+
+    private void findClassName() {
+        Pattern pattern = Pattern.compile(CLASSNAME_REGEX, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.sourceCode);
+
+        if (matcher.find()) {
+            if (matcher.group(3) != null) {
+                this.className = matcher.group(3);
+            } else {
+                throw new WeAssertException(getClassName() + ": could not find class name!");
+            }
+        } else {
+            throw new WeAssertException(getClassName() + ": given file is not a Java class source file!");
         }
     }
 
     public void insertOne(String methodName, String desc, String code) {
-        try {
-            CtMethod method = this.classContainer.getMethod(methodName, desc);
-            try {
-                method.insertAfter(code);
-            } catch (CannotCompileException e) {
-                throw new WeAssertException("JavassitCodeWriter: could not insert code", e);
+        Pattern pattern = Pattern.compile(METHODNAME_REGEX, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.sourceCode);
+
+        int firstCurlyBraceIndex = 0;
+        while (matcher.find()) {
+            if (matcher.group(6).equals(methodName)) {
+                firstCurlyBraceIndex = matcher.end();
+                break;
             }
-        } catch (NotFoundException e) {
-            throw new WeAssertException(
-                    String.format("JavassitCodeWriter: could not find method named %s", methodName), e
-            );
         }
+
+        if (firstCurlyBraceIndex == 0) {
+            throw new WeAssertException(String.format("%s: could not find method named \"%s\" !", getClassName(), methodName));
+        }
+
+        int lastCurlyBraceIndex = findLastCurlyBraceIndex(firstCurlyBraceIndex);
+        String before = this.sourceCode.substring(firstCurlyBraceIndex, lastCurlyBraceIndex - 1);
+        String after = before + "\n" + code + "}";
+
+        // CODE INSERTION HERE
+        this.sourceCode = this.sourceCode.replace(before, after);
+    }
+
+    private int findLastCurlyBraceIndex(int firstCurlyIndex) {
+        int curlyBracesCounter = 1;
+        int lastCurlyBrace = firstCurlyIndex;
+
+        for (;lastCurlyBrace < this.sourceCode.length(); lastCurlyBrace++) {
+            if (this.sourceCode.charAt(lastCurlyBrace) == '{') {
+                curlyBracesCounter++;
+            } else if (this.sourceCode.charAt(lastCurlyBrace) == '}') {
+                curlyBracesCounter--;
+            }
+
+            if (curlyBracesCounter == 0) {
+                break;
+            }
+        }
+
+        if(lastCurlyBrace == 0) {
+            throw new WeAssertException(getClassName() + ": parse error, could not find end of method!");
+        }
+
+        return lastCurlyBrace;
     }
 
     @Override
@@ -48,10 +108,6 @@ public class SourceCodeWriter implements CodeWriter {
 
     @Override
     public void writeAndCloseFile() {
-        try {
-            this.classContainer.writeFile();
-        } catch (Exception e) {
-            throw new WeAssertException("JavassitCodeWriter: could not write file", e);
-        }
+        // TODO: re-implement method
     }
 }
