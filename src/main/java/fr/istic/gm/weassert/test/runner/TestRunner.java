@@ -15,6 +15,13 @@ public interface TestRunner {
     void startTests(List<Class<?>> classes);
 
     /**
+     * Start all tests from compiled test path
+     *
+     * @param compiledTestPath the compiled test path
+     */
+    void startTests(String compiledTestPath);
+
+    /**
      * Start all tests from the class
      *
      * @param clazz the class to start test

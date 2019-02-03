@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,10 +43,15 @@ public class TestRunnerTest {
     @Test
     public void shouldAStartTestsClass() {
 
-        testRunner.startTests(Arrays.asList(getClass(), TestRunnerApp.class));
+        testRunner.startTests(asList(getClass(), TestRunnerApp.class));
 
         verify(mockJUnitCore).addListener(mockRunListener);
         verify(mockJUnitCore).run(getClass());
         verify(mockJUnitCore).run(TestRunnerApp.class);
+    }
+
+    @Test
+    public void shouldStartTestsFromClassPath() {
+        testRunner.startTests("fake/target/test-classes");
     }
 }
