@@ -20,7 +20,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
 
     public SourceCodeCompilerImpl(String mavenProjectPath, String mavenCommand, ProcessBuilderFactory processBuilderFactory) {
         this.mavenProjectPath = mavenProjectPath + POM_FILE;
-        if (!Files.exists(Paths.get(mavenProjectPath))) {
+        if (!Paths.get(mavenProjectPath).toFile().exists()) {
             throw new WeAssertException(String.format(ERROR_NO_POM, this.mavenProjectPath));
         }
         processBuilder = processBuilderFactory.create(mavenProjectPath, mavenCommand, COMPILE);

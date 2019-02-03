@@ -46,6 +46,8 @@ public class LocalVariableParserImpl implements LocalVariableParser {
     }
 
     private List<String> retrieveLocalVariables(MethodNode methodNode) {
-        return methodNode.localVariables.stream().filter(v -> !"this".equals(v.name)).map(v -> v.name).collect(Collectors.toList());
+        return methodNode.localVariables.stream()
+                .filter(v -> !"this".equals(v.name))
+                .map(v -> v.name).collect(Collectors.toList());
     }
 }

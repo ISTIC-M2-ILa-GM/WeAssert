@@ -10,8 +10,6 @@ import org.junit.runner.notification.RunListener;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
-
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
 
@@ -48,10 +46,5 @@ public class TestRunnerTest {
         verify(mockJUnitCore).addListener(mockRunListener);
         verify(mockJUnitCore).run(getClass());
         verify(mockJUnitCore).run(TestRunnerApp.class);
-    }
-
-    @Test
-    public void shouldStartTestsFromClassPath() {
-        testRunner.startTests("fake/target/test-classes");
     }
 }
