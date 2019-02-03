@@ -33,15 +33,15 @@ public class LocalVariableParserTest {
 
     @Before
     public void setUp() throws Exception {
-        when(mockClassReaderFactory.create(any())).thenReturn(new ClassReader(getClass().getName()));
+        when(mockClassReaderFactory.create(any())).thenReturn(new ClassReader(TestAnalyserTest.class.getName()));
 
-        localVariableParser = new LocalVariableParserImpl(mockClassReaderFactory, getClass(), new ClassNode());
+        localVariableParser = new LocalVariableParserImpl(mockClassReaderFactory, TestAnalyserTest.class, new ClassNode());
     }
 
     @Test
     public void shouldInstanceClassReader() {
 
-        verify(mockClassReaderFactory).create(getClass());
+        verify(mockClassReaderFactory).create(TestAnalyserTest.class);
     }
 
     @Test
@@ -52,8 +52,8 @@ public class LocalVariableParserTest {
         assertThat(result, notNullValue());
         assertThat(result, hasSize(3));
         assertThat(result.get(0).getName(), equalTo("setUp"));
-        assertThat(result.get(1).getName(), equalTo("shouldInstanceClassReader"));
-        assertThat(result.get(2).getName(), equalTo("shouldParseClassReader"));
-        assertThat(result.get(2).getLocalVariables(), hasItem("result"));
+        assertThat(result.get(1).getName(), equalTo("shouldCallAllNeedMethodsWhenAnalyse"));
+        assertThat(result.get(2).getName(), equalTo("shouldReturnAGoodResponseWhenAnalyse"));
+        assertThat(result.get(2).getLocalVariables(), hasItem("var0.getMethodName()"));
     }
 }

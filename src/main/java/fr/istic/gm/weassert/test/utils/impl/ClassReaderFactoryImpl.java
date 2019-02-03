@@ -15,11 +15,15 @@ public class ClassReaderFactoryImpl implements ClassReaderFactory {
     @Override
     public ClassReader create(Class clazz) {
         try {
-            String classPath = String.format("%s%s.class", clazz.getProtectionDomain().getCodeSource().getLocation().getPath(), clazz.getName().replace(".", "/"));
+            String classPath = mapClassToClassPath(clazz);
             InputStream classInputStream = new FileInputStream(new File(classPath));
             return new ClassReader(classInputStream);
         } catch (Exception e) {
             throw new WeAssertException(WRONG_CLASS_PATH, e);
         }
+    }
+
+    private String mapClassToClassPath(Class clazz) {
+        return String.format("%s%s.class", clazz.getProtectionDomain().getCodeSource().getLocation().getPath(), clazz.getName().replace(".", "/"));
     }
 }

@@ -1,7 +1,6 @@
 package fr.istic.gm.weassert.test.runner.impl;
 
 import fr.istic.gm.weassert.test.runner.TestRunner;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.notification.RunListener;
@@ -22,11 +21,6 @@ public class TestRunnerImpl implements TestRunner {
     public void startTests(List<Class<?>> classes) {
         classes.forEach(this::startTest);
         log.info("TESTS RUNNED: " + classes);
-    }
-
-    @Override
-    public void startTests(String compiledTestPath) {
-
     }
 
     @Override

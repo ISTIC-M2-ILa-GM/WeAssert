@@ -11,7 +11,7 @@ public class ProcessBuilderWrapperImpl implements ProcessBuilderWrapper {
 
     private ProcessBuilder processBuilder;
 
-    public ProcessBuilderWrapperImpl(String... command) {
+    ProcessBuilderWrapperImpl(String... command) {
         processBuilder = new ProcessBuilder(command);
     }
 

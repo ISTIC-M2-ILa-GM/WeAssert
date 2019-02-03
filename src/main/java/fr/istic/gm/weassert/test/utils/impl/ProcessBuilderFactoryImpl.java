@@ -16,7 +16,7 @@ public class ProcessBuilderFactoryImpl implements ProcessBuilderFactory {
 
     @Override
     public ProcessBuilderWrapper create(String directory, String... command) {
-        if (directory == null || !Files.isDirectory(Paths.get(directory))) {
+        if (directory == null || !Paths.get(directory).toFile().isDirectory()) {
             throw new WeAssertException(String.format(ERROR_DIRECTORY, directory));
         }
         if (command == null || command.length == 0 || command[0].isEmpty()) {

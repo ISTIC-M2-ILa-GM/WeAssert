@@ -35,12 +35,7 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
     }
 
     private List<Class<?>> mapPathsToClass(List<String> paths) {
-        List<String> fileNames = paths.stream()
-                .map(File::new)
-                .map(this::findFilesFromFolder)
-                .flatMap(Collection::stream)
-                .map(File::getPath)
-                .filter(f -> f.endsWith(".class")).collect(Collectors.toList());
+        List<String> fileNames = mapPathsToFileNames(paths);
         List<String> classNames = new ArrayList<>();
         fileNames.forEach(f -> {
             for (String p : paths) {
@@ -54,6 +49,15 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
             }
         });
         return classNames.stream().map(this::mapToClass).collect(Collectors.toList());
+    }
+
+    private List<String> mapPathsToFileNames(List<String> paths) {
+        return paths.stream()
+                .map(File::new)
+                .map(this::findFilesFromFolder)
+                .flatMap(Collection::stream)
+                .map(File::getPath)
+                .filter(f -> f.endsWith(".class")).collect(Collectors.toList());
     }
 
     private List<File> findFilesFromFolder(File folder) {
