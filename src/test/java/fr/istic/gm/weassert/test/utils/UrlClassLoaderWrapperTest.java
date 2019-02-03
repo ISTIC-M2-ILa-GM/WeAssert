@@ -1,7 +1,5 @@
 package fr.istic.gm.weassert.test.utils;
 
-import fr.istic.gm.weassert.TestRunnerAppTest;
-import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,12 +7,10 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.LOAD_CLASS_ERROR;
-import static fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl.PARSED_ERROR;
+import static fr.istic.gm.weassert.TestUtils.getAbsolutePath;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -27,53 +23,14 @@ public class UrlClassLoaderWrapperTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void shouldReturnTheClass() {
+    public void shouldReturnAllClassOfAnExternalProject() {
+        List<String> paths = asList(getAbsolutePath("fake/target/classes"), getAbsolutePath("fake/target/test-classes"));
 
-        List<String> paths = Arrays.asList("file://target/classes", "file:///target/test-classes");
-        List<String> classNames = Collections.singletonList("fr.istic.gm.weassert.TestRunnerAppTest");
-
-        UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(paths, classNames);
-
-        assertThat(urlClassLoaderWrapper.getClassList(), notNullValue());
-        assertThat(urlClassLoaderWrapper.getClassList(), hasSize(1));
-        assertThat(urlClassLoaderWrapper.getClassList().get(0), equalTo(TestRunnerAppTest.class));
-    }
-
-    @Test
-    public void shouldReturnAllClass() {
-
-        List<String> paths = Arrays.asList("file://target/classes", "file:///target/test-classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
-
-        UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(paths, classNames);
+        UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(paths);
 
         assertThat(urlClassLoaderWrapper.getClassList(), notNullValue());
         assertThat(urlClassLoaderWrapper.getClassList(), hasSize(2));
-        assertThat(urlClassLoaderWrapper.getClassList().get(0), equalTo(TestRunnerAppTest.class));
-        assertThat(urlClassLoaderWrapper.getClassList().get(1), equalTo(UrlClassLoaderWrapperTest.class));
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenWrongPathIsSent() {
-
-        List<String> paths = Collections.singletonList("target/classes");
-        List<String> classNames = Arrays.asList("fr.istic.gm.weassert.TestRunnerAppTest", "fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapperTest");
-
-        thrown.expect(WeAssertException.class);
-        thrown.expectMessage(PARSED_ERROR);
-
-        new UrlClassLoaderWrapperImpl(paths, classNames);
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenClassNotFound() {
-
-        List<String> paths = Arrays.asList("file://target/classes", "file:///target/test-classes");
-        List<String> classNames = Collections.singletonList("fr.istic.gm.weassert.NotAClass");
-
-        thrown.expect(WeAssertException.class);
-        thrown.expectMessage(LOAD_CLASS_ERROR);
-
-        new UrlClassLoaderWrapperImpl(paths, classNames);
+        assertThat(urlClassLoaderWrapper.getClassList().get(0).getSimpleName(), equalTo("Person"));
+        assertThat(urlClassLoaderWrapper.getClassList().get(1).getSimpleName(), equalTo("PersonTest"));
     }
 }

@@ -1,6 +1,7 @@
 package fr.istic.gm.weassert.test.analyser;
 
 import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.impl.CodeWriterImpl;
 import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
@@ -73,8 +74,8 @@ public class TestAnalyserTest {
 
         verify(mockLocalVariableParser).parse();
         verify(mockLocalVariableParser).getClazz();
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var\", a-var)");
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", CodeVisitor.class.getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var1\", a-var1)");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var\", a-var);");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var1\", a-var1);");
         verify(mockCodeWriter).writeAndCloseFile();
         verify(mockTestRunner, times(2)).startTest(getClass());
         verify(mockCodeVisitor, times(2)).getVariableValues();

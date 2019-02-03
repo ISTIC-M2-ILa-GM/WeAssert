@@ -27,12 +27,12 @@ public class SourceCodeCompilerITest {
     @Test
     public void shouldCompile() throws InterruptedException {
 
-        processBuilderFactory.create("fake", "rm", "-rf", "target/").start().waitFor();
+        processBuilderFactory.create("fake", "rm", "-rf", "target/classes").start().waitFor();
 
-        assertThat(Files.exists(Paths.get("fake/target")), equalTo(false));
+        assertThat(Files.exists(Paths.get("fake/target/classes")), equalTo(false));
 
         sourceCodeCompiler.compile().waitFor();
 
-        assertThat(Files.exists(Paths.get("fake/target")), equalTo(true));
+        assertThat(Files.exists(Paths.get("fake/target/classes")), equalTo(true));
     }
 }

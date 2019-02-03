@@ -25,6 +25,11 @@ public class TestRunnerImpl implements TestRunner {
     }
 
     @Override
+    public void startTests(String compiledTestPath) {
+
+    }
+
+    @Override
     public void startTest(Class<?> clazz) {
         jUnitCore.run(clazz);
         log.info("TESTS RUNNED: " + clazz);
