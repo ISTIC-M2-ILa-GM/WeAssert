@@ -46,7 +46,7 @@
         <lombok.version>1.18.2</lombok.version>
 
         <javassist.version>3.24.0-GA</javassist.version>
-        <asm.version>7.0</asm.version>
+        <asm.version>5.2</asm.version>
 
         <junit4.version>4.12</junit4.version>
         <hamcrest.version>1.3</hamcrest.version>
@@ -68,6 +68,11 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
         <!-- JavaAssists -->
         <dependency>
@@ -79,7 +84,7 @@
         <!-- ASM -->
         <dependency>
             <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
+            <artifactId>asm-debug-all</artifactId>
             <version>${asm.version}</version>
         </dependency>
 
