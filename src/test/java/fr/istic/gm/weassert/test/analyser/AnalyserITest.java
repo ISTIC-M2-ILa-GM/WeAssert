@@ -4,7 +4,7 @@ import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.analyser.impl.CodeVisitorImpl;
 import fr.istic.gm.weassert.test.analyser.impl.LocalVariableParserImpl;
 import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
-import fr.istic.gm.weassert.test.impl.CodeWriterImpl;
+import fr.istic.gm.weassert.test.impl.SourceCodeWriter;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.runner.TestRunnerListener;
@@ -48,7 +48,7 @@ public class AnalyserITest {
         UrlClassLoaderWrapper urlClassLoaderWrapper = new UrlClassLoaderWrapperImpl(asList(getAbsolutePath("fake/target/classes/"), getAbsolutePath("fake/target/test-classes/")));
         urlClassLoaderWrapper.getClassList().forEach(c -> {
             LocalVariableParser localVariableParser = new LocalVariableParserImpl(classReaderFactory, c, new ClassNode());
-            CodeWriter codeWriter = new CodeWriterImpl(c);
+            CodeWriter codeWriter = null; // new SourceCodeWriter(c);
             TestAnalyser testAnalyser = new TestAnalyserImpl(localVariableParser, codeWriter, CodeVisitorImpl.INSTANCE, testRunner);
             testAnalyseds.addAll(testAnalyser.analyse());
         });

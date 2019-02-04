@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import static fr.istic.gm.weassert.test.exception.WeAssertException.WRONG_CLASS_PATH;
+import static fr.istic.gm.weassert.test.utils.ClassResolverUtil.mapClassToClassPath;
 
 public class ClassReaderFactoryImpl implements ClassReaderFactory {
 
@@ -21,9 +22,5 @@ public class ClassReaderFactoryImpl implements ClassReaderFactory {
         } catch (Exception e) {
             throw new WeAssertException(WRONG_CLASS_PATH, e);
         }
-    }
-
-    private String mapClassToClassPath(Class clazz) {
-        return String.format("%s%s.class", clazz.getProtectionDomain().getCodeSource().getLocation().getPath(), clazz.getName().replace(".", "/"));
     }
 }
