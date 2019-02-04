@@ -17,7 +17,7 @@ public class TestRunnerApp extends Application {
         Parent root = loader.load();
 
         primaryStage.setTitle("WeAssert");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
 }
