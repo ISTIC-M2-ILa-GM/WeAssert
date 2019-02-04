@@ -7,19 +7,17 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-import static javafx.scene.chart.PieChart.*;
+import static javafx.scene.chart.PieChart.Data;
 
 public class MainController {
     private File file;
+
 
     @FXML
     public PieChart testResultsChart;
@@ -29,6 +27,9 @@ public class MainController {
 
     @FXML
     public Button browseButton;
+
+    @FXML
+    public TextArea logTextArea;
 
     private Data passedTest;
 
@@ -53,13 +54,20 @@ public class MainController {
         } else {
             this.selectedFile.setText(this.file.getPath());
         }
+        this.appendLogToTextArea("MainController.browseAction: " + selectedFile.getText());
+    }
+
+    public void appendLogToTextArea(String s) {
+        this.logTextArea.appendText(s + "\n");
     }
 
     public void generateAction(ActionEvent actionEvent) {
+        this.appendLogToTextArea("MainController.generateAction: started assertions generation...");
         // TODO: start assertions generation
     }
 
     public void testAction(ActionEvent actionEvent) {
+        this.appendLogToTextArea("MainController.testAction: started tests...");
         // TODO: start tests
         this.passedTest.setPieValue(8);
     }
