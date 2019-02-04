@@ -5,11 +5,15 @@ import fr.istic.gm.weassert.test.exception.WeAssertException;
 import lombok.Getter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static fr.istic.gm.weassert.test.utils.ClassResolverUtil.mapClassToClassPath;
 
 @Getter
 public class SourceCodeWriter implements CodeWriter {
@@ -71,11 +75,12 @@ public class SourceCodeWriter implements CodeWriter {
         }
 
         int lastCurlyBraceIndex = findLastCurlyBraceIndex(firstCurlyBraceIndex);
-        String before = this.sourceCode.substring(firstCurlyBraceIndex, lastCurlyBraceIndex - 1);
-        String after = before + "\n" + code + "}";
+
+        StringBuilder str = new StringBuilder(this.sourceCode);
+        str.insert(lastCurlyBraceIndex, code + "\n");
 
         // CODE INSERTION HERE
-        this.sourceCode = this.sourceCode.replace(before, after);
+        this.sourceCode = str.toString();
     }
 
     private int findLastCurlyBraceIndex(int firstCurlyIndex) {
@@ -108,6 +113,13 @@ public class SourceCodeWriter implements CodeWriter {
 
     @Override
     public void writeAndCloseFile() {
-        // TODO: re-implement method
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(this.sourceFile);
+            writer.write(this.sourceCode);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
