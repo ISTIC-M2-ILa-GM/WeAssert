@@ -5,10 +5,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.istic.gm.weassert.controller.MainController">
     <children>
@@ -18,6 +19,16 @@
                <children>
                   <VBox alignment="CENTER" prefWidth="600.0">
                      <children>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="45.0">
+                           <children>
+                              <Button fx:id="browseButton2" mnemonicParsing="false" onAction="#selectMavenAction" text="Maven binary location">
+                                 <HBox.margin>
+                                    <Insets right="8.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="selectedMaven" text="[System default]" />
+                           </children>
+                        </HBox>
                         <HBox alignment="CENTER">
                            <children>
                               <Button fx:id="browseButton" mnemonicParsing="false" onAction="#browseAction" text="Browse Maven project">
@@ -57,7 +68,12 @@
          </children></AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0">
          <children>
-            <TextArea fx:id="logTextArea" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TreeView fx:id="treeView" prefWidth="200.0" onMouseClicked="#itemClickedAction"></TreeView>
+                  <WebView fx:id="webView" prefHeight="-1.0" prefWidth="400.0" />
+               </children>
+            </HBox>
          </children></AnchorPane>
     </children>
 </VBox>
