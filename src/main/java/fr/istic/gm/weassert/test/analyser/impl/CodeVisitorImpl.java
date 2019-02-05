@@ -2,11 +2,15 @@ package fr.istic.gm.weassert.test.analyser.impl;
 
 import fr.istic.gm.weassert.test.analyser.CodeVisitor;
 import fr.istic.gm.weassert.test.model.VariableDefinition;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class CodeVisitorImpl implements CodeVisitor {
+
+    public static final CodeVisitor INSTANCE = new CodeVisitorImpl();
 
     private Map<VariableDefinition, Object> variableValues;
 

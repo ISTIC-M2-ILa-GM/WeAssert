@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.List;
 
 @Getter
-public class CodeWriterImpl implements CodeWriter {
+public class JavassitCodeWriter implements CodeWriter {
     private String className;
 
     private CtClass classContainer;
 
-    public CodeWriterImpl(Class clazz) {
+    public JavassitCodeWriter(Class clazz) {
         ClassPool pool = ClassPool.getDefault();
 
         try {
@@ -33,11 +33,11 @@ public class CodeWriterImpl implements CodeWriter {
             try {
                 method.insertAfter(code);
             } catch (CannotCompileException e) {
-                throw new WeAssertException("CodeWriterImpl: could not insert code", e);
+                throw new WeAssertException("JavassitCodeWriter: could not insert code", e);
             }
         } catch (NotFoundException e) {
             throw new WeAssertException(
-                    String.format("CodeWriterImpl: could not find method named %s", methodName), e
+                    String.format("JavassitCodeWriter: could not find method named %s", methodName), e
             );
         }
     }
@@ -52,7 +52,7 @@ public class CodeWriterImpl implements CodeWriter {
         try {
             this.classContainer.writeFile();
         } catch (Exception e) {
-            throw new WeAssertException("CodeWriterImpl: could not write file", e);
+            throw new WeAssertException("JavassitCodeWriter: could not write file", e);
         }
     }
 }

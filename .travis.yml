@@ -15,5 +15,5 @@ cache:
 
 jobs:
   include:
-  - script: mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify && sonar-scanner
+  - script: cd fake && mvn test && cd .. && mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify && sonar-scanner
     name: Unit & Quality

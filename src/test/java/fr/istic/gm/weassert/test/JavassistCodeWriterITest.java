@@ -1,6 +1,6 @@
 package fr.istic.gm.weassert.test;
 
-import fr.istic.gm.weassert.test.impl.CodeWriterImpl;
+import fr.istic.gm.weassert.test.impl.JavassitCodeWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,12 +10,12 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CodeWriterITest {
-    private CodeWriterImpl codeWriter;
+public class JavassistCodeWriterITest {
+    private JavassitCodeWriter codeWriter;
 
     @Before
     public void setUp() {
-        this.codeWriter = new CodeWriterImpl(getClass());
+        this.codeWriter = new JavassitCodeWriter(getClass());
 
         assertEquals(this.codeWriter.getClassName(), getClass().getName());
     }
