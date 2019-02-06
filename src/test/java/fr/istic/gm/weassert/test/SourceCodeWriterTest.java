@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static fr.istic.gm.weassert.TestUtils.getAbsolutePath;
 import static org.junit.Assert.*;
 
 
@@ -22,7 +23,7 @@ public class SourceCodeWriterTest {
 
     @Before
     public void setUp() {
-        this.classPath = "/home/gautier/IdeaProjects/WeAssert/fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java";
+        this.classPath = getAbsolutePath("fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java");
 
         this.sourceCodeWriter = new SourceCodeWriter(this.classPath);
     }

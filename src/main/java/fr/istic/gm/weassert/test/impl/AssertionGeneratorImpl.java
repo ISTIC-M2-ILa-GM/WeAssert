@@ -25,9 +25,9 @@ public class AssertionGeneratorImpl implements AssertionGenerator {
             testAnalysed.getVariableValues().keySet().forEach(key -> {
                 Object o = testAnalysed.getVariableValues().get(key);
                 if(PRIMITIVES.contains(o.getClass())) {
-                    generatedCodes.add("assertEquals(" + key + "," + o.toString() + ")");
+                    generatedCodes.add("org.junit.Assert.assertEquals(" + key + "," + o.toString() + "); // GENERATED ASSERT");
                 } else if(o.getClass() == String.class){
-                    generatedCodes.add("assertEquals(" + key + ",\"" + o.toString() + "\")");
+                    generatedCodes.add("org.junit.Assert.assertEquals(" + key + ",\"" + o.toString() + "\"); // GENERATED ASSERT");
                 }
             });
 

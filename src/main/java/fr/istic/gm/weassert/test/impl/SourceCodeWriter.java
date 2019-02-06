@@ -113,9 +113,8 @@ public class SourceCodeWriter implements CodeWriter {
 
     @Override
     public void writeAndCloseFile() {
-        PrintWriter writer = null;
         try {
-            writer = new PrintWriter(this.sourceFile);
+            PrintWriter writer = new PrintWriter(this.sourceFile);
             writer.write(this.sourceCode);
             writer.close();
         } catch (FileNotFoundException e) {

@@ -4,11 +4,14 @@ import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.analyser.CodeVisitor;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.analyser.TestAnalyser;
+import fr.istic.gm.weassert.test.compiler.SourceCodeCompiler;
+import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.model.MethodDefinition;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.model.VariableDefinition;
 import fr.istic.gm.weassert.test.runner.TestRunner;
+import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,13 +24,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class TestAnalyserImpl implements TestAnalyser {
 
-    private static final String CODE_VISITOR_INSTANCE = "INSTANCE";
+    private static final String VISITOR_CODE = "%s.INSTANCE.visit(getClass(), \"%s\", \"%s\", \"%s\", %s); // GENERATED VISITOR";
 
     private LocalVariableParser localVariableParser;
 
     private CodeWriter codeWriter;
 
     private CodeVisitor codeVisitor;
+
+    private SourceCodeCompiler sourceCodeCompiler;
+
+    private UrlClassLoaderWrapper urlClassLoaderWrapper;
 
     private TestRunner testRunner;
 
@@ -36,23 +43,32 @@ public class TestAnalyserImpl implements TestAnalyser {
 
         log.info("ANALYSE...");
         addVisitorToTests();
-        Class clazz = localVariableParser.getClazz();
-        Map<VariableDefinition, Object> firstVariableValues = runTestsAndRetrieveFistVariableValues(clazz);
+        Class<?> refreshedClass = retrieveClass();
+        Map<VariableDefinition, Object> firstVariableValues = runTestsAndRetrieveFistVariableValues(refreshedClass);
         List<TestAnalysed> result = createAnalyseResult(firstVariableValues, codeVisitor.getVariableValues());
 
         log.info(String.format("ANALYSED: %s", result));
         return result;
     }
 
+    private Class<?> retrieveClass() {
+        return urlClassLoaderWrapper.getClassList().stream()
+                .filter(c -> localVariableParser.getClazz().getName().equals(c.getName()))
+                .findFirst()
+                .orElseThrow(() -> new WeAssertException("Can't reload refreshed class"));
+    }
+
     private void addVisitorToTests() {
         List<LocalVariableParsed> parse = localVariableParser.parse();
         parse.forEach(p ->
                 p.getLocalVariables().forEach(v ->
-                {
-                    codeWriter.insertOne(p.getName(), p.getDesc(), String.format("%s.%s.visit(getClass(), \"%s\", \"%s\", \"%s\", %s);", codeVisitor.getClass().getName(), CODE_VISITOR_INSTANCE, p.getName(), p.getDesc(), v, v));
-
-                }));
+                        {
+                            String visitor = String.format(VISITOR_CODE, codeVisitor.getClass().getName(), p.getName(), p.getDesc(), v, v);
+                            codeWriter.insertOne(p.getName(), p.getDesc(), visitor);
+                        }
+                ));
         codeWriter.writeAndCloseFile();
+        sourceCodeCompiler.compileAndWait();
     }
 
     private Map<VariableDefinition, Object> runTestsAndRetrieveFistVariableValues(Class clazz) {
