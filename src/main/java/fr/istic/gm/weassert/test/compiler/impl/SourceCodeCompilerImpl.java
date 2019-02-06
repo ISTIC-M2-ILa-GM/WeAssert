@@ -6,8 +6,20 @@ import fr.istic.gm.weassert.test.utils.ProcessBuilderFactory;
 import fr.istic.gm.weassert.test.utils.ProcessBuilderWrapper;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,6 +48,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
     @Override
     public void compileAndWait() {
         try {
+            insertDeps();
             Process start = processBuilder.start();
             BufferedReader buff = new BufferedReader(new InputStreamReader(start.getInputStream()));
             while (start.isAlive()) {
@@ -47,6 +60,37 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
             urlClassLoaderWrapper.refresh();
         } catch (Exception e) {
             throw new WeAssertException("SourceCodeCompilerImpl: Compile error", e);
+        }
+    }
+
+    private void insertDeps() {
+        try {
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            domFactory.setIgnoringComments(true);
+            DocumentBuilder builder = domFactory.newDocumentBuilder();
+            Document doc = builder.parse(new File(mavenProjectPath));
+            NodeList nodes = doc.getElementsByTagName("dependencies");
+            Element dependency = doc.createElement("dependency");
+            Element groupId = doc.createElement("groupId");
+            Element artifactId = doc.createElement("artifactId");
+            Element version = doc.createElement("version");
+            Text groupIdText = doc.createTextNode("fr.istic.gm");
+            Text artifactIdText = doc.createTextNode("we-assert");
+            Text versionText = doc.createTextNode("1.0-SNAPSHOT");
+            groupId.appendChild(groupIdText);
+            artifactId.appendChild(artifactIdText);
+            version.appendChild(versionText);
+            dependency.appendChild(groupId);
+            dependency.appendChild(artifactId);
+            dependency.appendChild(version);
+            nodes.item(0).insertBefore(dependency, nodes.item(0).getChildNodes().item(0).getNextSibling());
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(doc);
+            StreamResult streamResult = new StreamResult(new File(mavenProjectPath));
+            transformer.transform(domSource, streamResult);
+        } catch (Exception e) {
+            throw new WeAssertException("Can't insert deps", e);
         }
     }
 }
