@@ -12,9 +12,10 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import sun.reflect.generics.tree.Tree;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,21 +74,24 @@ public class MainController {
             this.selectedFile.setText("[No project selected]");
         } else {
             this.selectedFile.setText(this.file.getPath());
-            this.treeView.getRoot().setValue(this.file.getName());
-            this.treeView.getRoot().getChildren().clear();
-            List<TreeItem<String>> collect = FileUtils.findFilesFromFolder(file)
-                    .stream().filter(f -> f.getName().endsWith("Test.java"))
-                    .map(f -> new TreeItem<String>(f.getName()))
-                    .collect(Collectors.toList());
 
-            this.treeView.getRoot().getChildren().addAll(collect);
+            showTestFiles(this.file);
         }
     }
 
-    public void displaySourceCodeWithHiglights(String s) {
-        this.webEngine.loadContent(String.format("<html><body><pre><code>" +
-                "%s" +
-                "</code></pre></body>", s));
+    public void displaySourceCode(String s) {
+        File sourceFile = new File(s);
+        if (sourceFile.isFile()) {
+            try {
+                String sourceCode = new String(Files.readAllBytes(sourceFile.toPath()));
+
+                this.webEngine.loadContent(String.format("<html><body><pre><code>\n" +
+                        "%s\n" +
+                        "</code></pre></body>", sourceCode));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void generateAction(ActionEvent actionEvent) {
@@ -109,6 +113,18 @@ public class MainController {
         }
     }
 
+    public void showTestFiles(File directory) {
+        this.treeView.getRoot().setValue(directory.getName());
+        this.treeView.getRoot().getChildren().clear();
+
+        List<TreeItem<String>> collect = FileUtils.findFilesFromFolder(directory)
+                .stream().filter(f -> f.getName().endsWith("Test.java"))
+                .map(f -> new TreeItem<>(f.getAbsolutePath()))
+                .collect(Collectors.toList());
+
+        this.treeView.getRoot().getChildren().addAll(collect);
+    }
+
     public void addClassToTreeView(String className) {
         TreeItem root = this.treeView.getRoot();
         TreeItem<String> item = new TreeItem<> (className);
@@ -118,7 +134,6 @@ public class MainController {
     public void itemClickedAction(MouseEvent mouseEvent) {
         MultipleSelectionModel selectionModel = this.treeView.getSelectionModel();
         ObservableList<TreeItem> selectedItems = selectionModel.getSelectedItems();
-        // TODO: show corresponding class in WebView
-        // System.out.println(selectedItems.get(0).getValue());
+        this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 }
