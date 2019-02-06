@@ -14,12 +14,15 @@ import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.runner.TestRunnerListener;
 import fr.istic.gm.weassert.test.runner.impl.TestRunnerImpl;
+import fr.istic.gm.weassert.test.utils.BackupUtils;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
+import fr.istic.gm.weassert.test.utils.impl.BackupUtilsImpl;
 import fr.istic.gm.weassert.test.utils.impl.ClassReaderFactoryImpl;
 import fr.istic.gm.weassert.test.utils.impl.ProcessBuilderFactoryImpl;
 import fr.istic.gm.weassert.test.utils.impl.UrlClassLoaderWrapperImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -37,12 +40,18 @@ public class ApplicationITest {
     private ClassReaderFactory classReaderFactory;
 
     private TestRunner testRunner;
+    private BackupUtils backupUtils;
 
     @Before
     public void setUp() {
-
+        backupUtils = new BackupUtilsImpl(getAbsolutePath("fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java"));
         classReaderFactory = new ClassReaderFactoryImpl();
         testRunner = new TestRunnerImpl(new JUnitCore(), new TestRunnerListener());
+    }
+
+    @After
+    public void tearDown() {
+        backupUtils.restore();
     }
 
     @Test
@@ -52,8 +61,10 @@ public class ApplicationITest {
             LocalVariableParser localVariableParser = new LocalVariableParserImpl(classReaderFactory, c, new ClassNode());
             SourceCodeCompiler codeCompiler = new SourceCodeCompilerImpl("fake", "/usr/bin/mvn", new ProcessBuilderFactoryImpl(), urlClassLoaderWrapper);
             String sourcePath = mapClassToSourcePath(c);
+            BackupUtils backupUtils = new BackupUtilsImpl(sourcePath);
             TestAnalyser testAnalyser = new TestAnalyserImpl(localVariableParser, new SourceCodeWriter(sourcePath), CodeVisitorImpl.INSTANCE, codeCompiler, urlClassLoaderWrapper, testRunner);
             List<TestAnalysed> testAnalyseds = testAnalyser.analyse();
+            backupUtils.restore();
             AssertionGenerator assertionGenerator = new AssertionGeneratorImpl(new SourceCodeWriter(sourcePath));
             assertionGenerator.generate(testAnalyseds);
         });

@@ -2,9 +2,11 @@ package fr.istic.gm.weassert.test.compiler.impl;
 
 import fr.istic.gm.weassert.test.compiler.SourceCodeCompiler;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
+import fr.istic.gm.weassert.test.utils.BackupUtils;
 import fr.istic.gm.weassert.test.utils.ProcessBuilderFactory;
 import fr.istic.gm.weassert.test.utils.ProcessBuilderWrapper;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
+import fr.istic.gm.weassert.test.utils.impl.BackupUtilsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,7 +50,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
     @Override
     public void compileAndWait() {
         try {
-            insertDeps();
+            BackupUtils backupUtils = insertDeps();
             Process start = processBuilder.start();
             BufferedReader buff = new BufferedReader(new InputStreamReader(start.getInputStream()));
             while (start.isAlive()) {
@@ -58,13 +60,15 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
                 }
             }
             urlClassLoaderWrapper.refresh();
+            backupUtils.restore();
         } catch (Exception e) {
             throw new WeAssertException("SourceCodeCompilerImpl: Compile error", e);
         }
     }
 
-    private void insertDeps() {
+    private BackupUtils insertDeps() {
         try {
+            BackupUtils backupUtils = new BackupUtilsImpl(mavenProjectPath);
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setIgnoringComments(true);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
@@ -89,6 +93,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
             DOMSource domSource = new DOMSource(doc);
             StreamResult streamResult = new StreamResult(new File(mavenProjectPath));
             transformer.transform(domSource, streamResult);
+            return backupUtils;
         } catch (Exception e) {
             throw new WeAssertException("Can't insert deps", e);
         }
