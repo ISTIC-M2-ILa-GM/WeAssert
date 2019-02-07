@@ -9,7 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AssertionGeneratorTest {
@@ -58,7 +62,7 @@ public class AssertionGeneratorTest {
         this.assertionGenerator.generate(Collections.singletonList(testAnalysed));
 
         List<String> generatedCodes = new ArrayList<>();
-        generatedCodes.add("assertEquals(maVariable2,\"Hey there !\")");
+        generatedCodes.add("org.junit.Assert.assertEquals(maVariable2,\"Hey there !\"); // GENERATED ASSERT");
         Mockito.verify(this.codeWriterMock).insertMany(testAnalysed.getMethodName(), testAnalysed.getMethodDesc(), generatedCodes);
     }
 
@@ -78,7 +82,7 @@ public class AssertionGeneratorTest {
         this.assertionGenerator.generate(Collections.singletonList(testAnalysed));
 
         List<String> generatedCodes = new ArrayList<>();
-        generatedCodes.add("assertEquals(maVariable3,123)");
+        generatedCodes.add("org.junit.Assert.assertEquals(maVariable3,123); // GENERATED ASSERT");
         Mockito.verify(this.codeWriterMock).insertMany(testAnalysed.getMethodName(), testAnalysed.getMethodDesc(), generatedCodes);
     }
 
@@ -98,7 +102,7 @@ public class AssertionGeneratorTest {
         this.assertionGenerator.generate(Collections.singletonList(testAnalysed));
 
         List<String> generatedCodes = new ArrayList<>();
-        generatedCodes.add("assertEquals(maVariable4,123.0)");
+        generatedCodes.add("org.junit.Assert.assertEquals(maVariable4,123.0); // GENERATED ASSERT");
         Mockito.verify(this.codeWriterMock).insertMany(testAnalysed.getMethodName(), testAnalysed.getMethodDesc(), generatedCodes);
     }
 }

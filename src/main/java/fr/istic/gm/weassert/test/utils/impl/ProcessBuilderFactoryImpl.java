@@ -5,7 +5,6 @@ import fr.istic.gm.weassert.test.utils.ProcessBuilderFactory;
 import fr.istic.gm.weassert.test.utils.ProcessBuilderWrapper;
 import lombok.AllArgsConstructor;
 
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @AllArgsConstructor

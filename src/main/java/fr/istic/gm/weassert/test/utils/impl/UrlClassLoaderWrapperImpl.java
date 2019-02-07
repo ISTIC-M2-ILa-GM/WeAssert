@@ -20,13 +20,20 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
     private static final String LOAD_CLASS_ERROR = "Can't load class: ";
     private static final String PARSED_ERROR = "Url can't be parsed: ";
 
+    private List<String> paths;
+
     @Getter
     private List<Class<?>> classList;
 
     private URLClassLoader urlClassLoader;
 
     public UrlClassLoaderWrapperImpl(List<String> paths) {
+        this.paths = paths;
+        refresh();
+    }
 
+    @Override
+    public void refresh() {
         log.info("LOADING CLASS...");
         URL[] urls = paths.stream().map(this::mapToUrl).toArray(URL[]::new);
         urlClassLoader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
@@ -40,8 +47,9 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
         fileNames.forEach(f -> {
             for (String p : paths) {
                 if (f.startsWith(p)) {
-                    String className = f.replaceAll(String.format("^%s/", p), "")
+                    String className = f.replaceAll(String.format("^%s", p), "")
                             .replaceAll("\\.class$", "")
+                            .replaceAll("^/", "")
                             .replace("/", ".");
                     classNames.add(className);
                     break;

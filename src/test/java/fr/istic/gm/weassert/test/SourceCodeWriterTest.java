@@ -1,8 +1,11 @@
 package fr.istic.gm.weassert.test;
 
 import fr.istic.gm.weassert.test.impl.SourceCodeWriter;
+import fr.istic.gm.weassert.test.utils.BackupUtils;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactoryTest;
+import fr.istic.gm.weassert.test.utils.impl.BackupUtilsImpl;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,18 +16,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static fr.istic.gm.weassert.TestUtils.getAbsolutePath;
 import static org.junit.Assert.*;
 
 
 public class SourceCodeWriterTest {
     private SourceCodeWriter sourceCodeWriter;
     private String classPath;
+    private BackupUtils backupUtils;
 
     @Before
     public void setUp() {
-        this.classPath = "/home/gautier/IdeaProjects/WeAssert/fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java";
+        this.classPath = getAbsolutePath("fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java");
 
+        backupUtils = new BackupUtilsImpl(classPath);
         this.sourceCodeWriter = new SourceCodeWriter(this.classPath);
+    }
+
+    @After
+    public void tearDown() {
+        backupUtils.restore();
     }
 
     @Test

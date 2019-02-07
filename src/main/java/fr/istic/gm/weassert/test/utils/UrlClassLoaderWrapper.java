@@ -13,4 +13,6 @@ public interface UrlClassLoaderWrapper {
      * @return the classes
      */
     List<Class<?>> getClassList();
+
+    void refresh();
 }

@@ -2,10 +2,12 @@ package fr.istic.gm.weassert.test.analyser;
 
 import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
+import fr.istic.gm.weassert.test.compiler.SourceCodeCompiler;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.model.VariableDefinition;
 import fr.istic.gm.weassert.test.runner.TestRunner;
+import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,13 @@ public class TestAnalyserTest {
     private CodeVisitor mockCodeVisitor;
 
     @Mock
+    private SourceCodeCompiler mockSourceCodeCompiler;
+
+    @Mock
     private TestRunner mockTestRunner;
+
+    @Mock
+    private UrlClassLoaderWrapper mockUrlClassLoaderWrapper;
 
     private LocalVariableParsed fakeLocalVariableParsed;
 
@@ -46,7 +54,7 @@ public class TestAnalyserTest {
 
     @Before
     public void setUp() {
-        testAnalyser = new TestAnalyserImpl(mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockTestRunner);
+        testAnalyser = new TestAnalyserImpl(mockLocalVariableParser, mockCodeWriter, mockCodeVisitor, mockSourceCodeCompiler, mockUrlClassLoaderWrapper, mockTestRunner);
 
         fakeLocalVariableParsed = LocalVariableParsed.builder()
                 .desc("a-desc")
@@ -66,14 +74,17 @@ public class TestAnalyserTest {
 
         when(mockLocalVariableParser.parse()).thenReturn(asList(fakeLocalVariableParsed, fakeLocalVariableParsed1));
         when(mockLocalVariableParser.getClazz()).thenReturn(getClass());
+        when(mockUrlClassLoaderWrapper.getClassList()).thenReturn(Collections.singletonList(getClass()));
 
         testAnalyser.analyse();
 
         verify(mockLocalVariableParser).parse();
         verify(mockLocalVariableParser).getClazz();
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var\", a-var);");
-        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var1\", a-var1);");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var\", a-var); // GENERATED VISITOR");
+        verify(mockCodeWriter).insertOne("a-name", "a-desc", mockCodeVisitor.getClass().getName() + ".INSTANCE.visit(getClass(), \"a-name\", \"a-desc\", \"a-var1\", a-var1); // GENERATED VISITOR");
         verify(mockCodeWriter).writeAndCloseFile();
+        verify(mockSourceCodeCompiler).compileAndWait();
+        verify(mockUrlClassLoaderWrapper).getClassList();
         verify(mockTestRunner, times(2)).startTest(getClass());
         verify(mockCodeVisitor, times(2)).getVariableValues();
         verify(mockCodeVisitor).initVariableValues();
@@ -104,6 +115,7 @@ public class TestAnalyserTest {
         when(mockLocalVariableParser.parse()).thenReturn(asList(fakeLocalVariableParsed, fakeLocalVariableParsed1));
         when(mockLocalVariableParser.getClazz()).thenReturn(getClass());
         when(mockCodeVisitor.getVariableValues()).thenReturn(firstCall, secondCall);
+        when(mockUrlClassLoaderWrapper.getClassList()).thenReturn(Collections.singletonList(getClass()));
 
         List<TestAnalysed> result = testAnalyser.analyse();
 
