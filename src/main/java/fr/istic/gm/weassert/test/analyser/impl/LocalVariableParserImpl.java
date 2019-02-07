@@ -4,6 +4,7 @@ import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
+import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.objectweb.asm.ClassReader;
@@ -31,13 +32,16 @@ public class LocalVariableParserImpl implements LocalVariableParser {
 
     private ClassNode classNode;
 
+    private UrlClassLoaderWrapper urlClassLoaderWrapper;
+
     @Getter
     private Class clazz;
 
-    public LocalVariableParserImpl(ClassReaderFactory classReaderFactory, Class clazz, ClassNode classNode) {
+    public LocalVariableParserImpl(ClassReaderFactory classReaderFactory, Class clazz, ClassNode classNode, UrlClassLoaderWrapper urlClassLoaderWrapper) {
         this.classReader = classReaderFactory.create(clazz);
         this.clazz = clazz;
         this.classNode = classNode;
+        this.urlClassLoaderWrapper = urlClassLoaderWrapper;
     }
 
     public List<LocalVariableParsed> parse() {
@@ -83,8 +87,8 @@ public class LocalVariableParserImpl implements LocalVariableParser {
 
     private List<String> retrieveGetters(LocalVariableNode localVariable, Type type) {
         List<String> variables = new ArrayList<>();
-        try {
-            Class<?> c = Class.forName(type.getClassName());
+        Class<?> c = urlClassLoaderWrapper.getClassList().stream().filter(cl -> cl.getName().equals(type.getClassName())).findFirst().orElse(null);
+        if (c != null) {
             for (Field f : c.getDeclaredFields()) {
                 if (f.getName() == null || f.getName().isEmpty()) {
                     continue;
@@ -94,8 +98,6 @@ public class LocalVariableParserImpl implements LocalVariableParser {
                     variables.add(String.format("%s.%s()", localVariable.name, methodName));
                 }
             }
-        } catch (ClassNotFoundException e) {
-            throw new WeAssertException("Can't found a variable type", e);
         }
         return variables;
     }

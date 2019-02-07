@@ -47,8 +47,9 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
         fileNames.forEach(f -> {
             for (String p : paths) {
                 if (f.startsWith(p)) {
-                    String className = f.replaceAll(String.format("^%s/", p), "")
+                    String className = f.replaceAll(String.format("^%s", p), "")
                             .replaceAll("\\.class$", "")
+                            .replaceAll("^/", "")
                             .replace("/", ".");
                     classNames.add(className);
                     break;
