@@ -1,6 +1,9 @@
 package fr.istic.gm.weassert.controller;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import fr.istic.gm.weassert.test.application.WeAssertRunner;
+import fr.istic.gm.weassert.test.application.impl.WeAssertRunnerImpl;
+import fr.istic.gm.weassert.test.runner.TestRunnerListener;
 import fr.istic.gm.weassert.test.utils.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,7 +44,7 @@ public class MainController {
     @FXML
     public TreeView treeView;
 
-    private File file;
+    private File projectDirectory;
 
     private File mavenBinary;
 
@@ -50,6 +53,8 @@ public class MainController {
     private Data failedTests;
 
     private WebEngine webEngine;
+
+    private WeAssertRunner weAssertRunner;
 
 
     public void initialize() {
@@ -69,14 +74,46 @@ public class MainController {
 
     public void browseAction(ActionEvent actionEvent) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        this.file = directoryChooser.showDialog(null);
-        if (this.file == null) {
+        this.projectDirectory = directoryChooser.showDialog(null);
+        if (this.projectDirectory == null) {
             this.selectedFile.setText("[No project selected]");
         } else {
-            this.selectedFile.setText(this.file.getPath());
+            if (this.projectDirectory.isDirectory()){
+                this.selectedFile.setText(this.projectDirectory.getPath());
 
-            showTestFiles(this.file);
+                this.weAssertRunner = new WeAssertRunnerImpl(
+                        projectDirectory.getAbsolutePath(),
+                        this.mavenBinary != null ? this.mavenBinary.getAbsolutePath() : "/usr/bin/mvn",
+                        new TestRunnerListener()
+                );
+
+                showTestFiles(this.projectDirectory);
+            }
         }
+    }
+
+    public void selectMavenAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        this.mavenBinary = fileChooser.showOpenDialog(null);
+        if (this.mavenBinary == null) {
+            this.selectedMaven.setText("[System default]");
+        } else {
+            this.selectedMaven.setText(this.projectDirectory.getPath());
+        }
+    }
+
+    public void generateAction(ActionEvent actionEvent) {
+        this.weAssertRunner.generate();
+    }
+
+    public void testAction(ActionEvent actionEvent) {
+        this.weAssertRunner.runTests();
+    }
+
+    public void itemClickedAction(MouseEvent mouseEvent) {
+        MultipleSelectionModel selectionModel = this.treeView.getSelectionModel();
+        ObservableList<TreeItem> selectedItems = selectionModel.getSelectedItems();
+        this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 
     public void displaySourceCode(String s) {
@@ -91,25 +128,6 @@ public class MainController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void generateAction(ActionEvent actionEvent) {
-        // TODO: start assertions generation
-    }
-
-    public void testAction(ActionEvent actionEvent) {
-        // TODO: start tests
-        this.passedTest.setPieValue(8);
-    }
-
-    public void selectMavenAction(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        this.mavenBinary = fileChooser.showOpenDialog(null);
-        if (this.mavenBinary == null) {
-            this.selectedMaven.setText("[System default]");
-        } else {
-            this.selectedMaven.setText(this.file.getPath());
         }
     }
 
@@ -129,11 +147,5 @@ public class MainController {
         TreeItem root = this.treeView.getRoot();
         TreeItem<String> item = new TreeItem<> (className);
         root.getChildren().add(item);
-    }
-
-    public void itemClickedAction(MouseEvent mouseEvent) {
-        MultipleSelectionModel selectionModel = this.treeView.getSelectionModel();
-        ObservableList<TreeItem> selectedItems = selectionModel.getSelectedItems();
-        this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 }
