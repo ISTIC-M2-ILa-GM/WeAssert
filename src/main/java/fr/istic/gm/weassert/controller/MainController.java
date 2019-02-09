@@ -1,17 +1,24 @@
 package fr.istic.gm.weassert.controller;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import fr.istic.gm.weassert.test.application.WeAssertRunner;
+import fr.istic.gm.weassert.test.application.impl.WeAssertRunnerImpl;
+import fr.istic.gm.weassert.test.runner.TestRunnerListener;
 import fr.istic.gm.weassert.test.utils.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.junit.runner.Description;
+import org.junit.runner.Result;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,16 +48,17 @@ public class MainController {
     @FXML
     public TreeView treeView;
 
-    private File file;
+    private File projectDirectory;
 
     private File mavenBinary;
 
-    private Data passedTest;
+    private int passedTest = 0;
 
-    private Data failedTests;
+    private int failedTests = 0;
 
     private WebEngine webEngine;
 
+    private WeAssertRunner weAssertRunner;
 
     public void initialize() {
         this.webEngine = this.webView.getEngine();
@@ -60,28 +68,73 @@ public class MainController {
 
         this.testResultsChart.setStartAngle(45);
 
-        this.passedTest = new Data("Passed tests", 1);
-        this.failedTests = new Data("Failed tests", 1);
-
-        ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(failedTests, passedTest));
+        ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(new Data("Passed tests", this.passedTest), new Data("Failed tests", this.failedTests)));
         this.testResultsChart.setData(observableList);
     }
 
     public void browseAction(ActionEvent actionEvent) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        this.file = directoryChooser.showDialog(null);
-        if (this.file == null) {
+        this.projectDirectory = directoryChooser.showDialog(null);
+        if (this.projectDirectory == null) {
             this.selectedFile.setText("[No project selected]");
         } else {
-            this.selectedFile.setText(this.file.getPath());
+            if (this.projectDirectory.isDirectory()){
+                this.selectedFile.setText(this.projectDirectory.getPath());
 
-            showTestFiles(this.file);
+                this.weAssertRunner = new WeAssertRunnerImpl(
+                        projectDirectory.getAbsolutePath(),
+                        this.mavenBinary != null ? this.mavenBinary.getAbsolutePath() : "/usr/bin/mvn",
+                        new TestRunnerListener() {
+                            @Override
+                            public void testRunFinished(Result result) throws Exception {
+                                passedTest += result.getRunCount() - result.getFailureCount();
+                                failedTests += result.getFailureCount();
+                                Data passedTestData = new Data("Passed tests", passedTest);
+
+                                Data failedTestData = new Data("Failed tests", failedTests);
+
+                                ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(passedTestData, failedTestData));
+                                testResultsChart.setData(observableList);
+                                System.out.println(String.format("Run count: %s", result.getRunCount()));
+                                System.out.println(String.format("Failed tests: %s", result.getFailureCount()));
+                            }
+                        }
+                );
+
+                showTestFiles(this.projectDirectory);
+            }
         }
+    }
+
+    public void selectMavenAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        this.mavenBinary = fileChooser.showOpenDialog(null);
+        if (this.mavenBinary == null) {
+            this.selectedMaven.setText("[System default]");
+        } else {
+            this.selectedMaven.setText(this.projectDirectory.getPath());
+        }
+    }
+
+    public void generateAction(ActionEvent actionEvent) {
+        this.weAssertRunner.generate();
+    }
+
+    public void testAction(ActionEvent actionEvent) {
+        passedTest = 0;
+        failedTests = 0;
+        this.weAssertRunner.runTests();
+    }
+
+    public void itemClickedAction(MouseEvent mouseEvent) {
+        MultipleSelectionModel selectionModel = this.treeView.getSelectionModel();
+        ObservableList<TreeItem> selectedItems = selectionModel.getSelectedItems();
+        this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 
     public void displaySourceCode(String s) {
         File sourceFile = new File(s);
-        if (sourceFile.isFile()) {
+        if (sourceFile.isFile() && !sourceFile.isDirectory()) {
             try {
                 String sourceCode = new String(Files.readAllBytes(sourceFile.toPath()));
 
@@ -91,25 +144,6 @@ public class MainController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void generateAction(ActionEvent actionEvent) {
-        // TODO: start assertions generation
-    }
-
-    public void testAction(ActionEvent actionEvent) {
-        // TODO: start tests
-        this.passedTest.setPieValue(8);
-    }
-
-    public void selectMavenAction(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        this.mavenBinary = fileChooser.showOpenDialog(null);
-        if (this.mavenBinary == null) {
-            this.selectedMaven.setText("[System default]");
-        } else {
-            this.selectedMaven.setText(this.file.getPath());
         }
     }
 
@@ -129,11 +163,5 @@ public class MainController {
         TreeItem root = this.treeView.getRoot();
         TreeItem<String> item = new TreeItem<> (className);
         root.getChildren().add(item);
-    }
-
-    public void itemClickedAction(MouseEvent mouseEvent) {
-        MultipleSelectionModel selectionModel = this.treeView.getSelectionModel();
-        ObservableList<TreeItem> selectedItems = selectionModel.getSelectedItems();
-        this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 }
