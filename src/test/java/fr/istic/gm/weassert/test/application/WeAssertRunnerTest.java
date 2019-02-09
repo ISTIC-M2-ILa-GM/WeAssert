@@ -33,7 +33,7 @@ public class WeAssertRunnerTest {
     public void setUp() {
         testRunned = false;
         backupUtils = new BackupUtilsImpl(getAbsolutePath("fake/src/test/java/fr/istic/gm/weassert/fake/PersonTest.java"));
-        weAssertRunner = new WeAssertRunnerImpl(getAbsolutePath("fake"), "/usr/bin/mvn", new TestRunnerListener() {
+        weAssertRunner = new WeAssertRunnerImpl(getAbsolutePath("fake"), "mvn", new TestRunnerListener() {
             @Override
             public void testRunFinished(Result result) {
                 testRunned = true;
