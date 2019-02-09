@@ -17,5 +17,7 @@ public class PersonTest {
         p.setName("name");
 
         assertFalse(p.isAdult());
-    }
+    org.junit.Assert.assertEquals(p.getName(),"name"); // GENERATED ASSERT
+org.junit.Assert.assertEquals(p.getAge(),13); // GENERATED ASSERT
+}
 }

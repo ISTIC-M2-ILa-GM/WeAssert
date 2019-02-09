@@ -7,10 +7,12 @@ import fr.istic.gm.weassert.test.runner.TestRunnerListener;
 import fr.istic.gm.weassert.test.utils.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
@@ -87,7 +89,11 @@ public class MainController {
                             public void testRunFinished(Result result) throws Exception {
                                 passedTest += result.getRunCount() - result.getFailureCount();
                                 failedTests += result.getFailureCount();
-                                ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(new Data("Passed tests", passedTest), new Data("Failed tests", failedTests)));
+                                Data passedTestData = new Data("Passed tests", passedTest);
+
+                                Data failedTestData = new Data("Failed tests", failedTests);
+
+                                ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(passedTestData, failedTestData));
                                 testResultsChart.setData(observableList);
                                 System.out.println(String.format("Run count: %s", result.getRunCount()));
                                 System.out.println(String.format("Failed tests: %s", result.getFailureCount()));
