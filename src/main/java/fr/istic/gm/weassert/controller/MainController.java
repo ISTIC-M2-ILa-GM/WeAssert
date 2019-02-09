@@ -50,9 +50,9 @@ public class MainController {
 
     private File mavenBinary;
 
-    private Data passedTest;
+    private int passedTest = 0;
 
-    private Data failedTests;
+    private int failedTests = 0;
 
     private WebEngine webEngine;
 
@@ -66,10 +66,7 @@ public class MainController {
 
         this.testResultsChart.setStartAngle(45);
 
-        this.passedTest = new Data("Passed tests", 1);
-        this.failedTests = new Data("Failed tests", 1);
-
-        ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(failedTests, passedTest));
+        ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(new Data("Passed tests", this.passedTest), new Data("Failed tests", this.failedTests)));
         this.testResultsChart.setData(observableList);
     }
 
@@ -88,6 +85,10 @@ public class MainController {
                         new TestRunnerListener() {
                             @Override
                             public void testRunFinished(Result result) throws Exception {
+                                passedTest += result.getRunCount() - result.getFailureCount();
+                                failedTests += result.getFailureCount();
+                                ObservableList<Data> observableList = new ObservableListWrapper<>(Arrays.asList(new Data("Passed tests", passedTest), new Data("Failed tests", failedTests)));
+                                testResultsChart.setData(observableList);
                                 System.out.println(String.format("Run count: %s", result.getRunCount()));
                                 System.out.println(String.format("Failed tests: %s", result.getFailureCount()));
                             }
@@ -114,6 +115,8 @@ public class MainController {
     }
 
     public void testAction(ActionEvent actionEvent) {
+        passedTest = 0;
+        failedTests = 0;
         this.weAssertRunner.runTests();
     }
 
@@ -125,7 +128,7 @@ public class MainController {
 
     public void displaySourceCode(String s) {
         File sourceFile = new File(s);
-        if (sourceFile.isFile()) {
+        if (sourceFile.isFile() && !sourceFile.isDirectory()) {
             try {
                 String sourceCode = new String(Files.readAllBytes(sourceFile.toPath()));
 
