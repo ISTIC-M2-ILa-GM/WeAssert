@@ -15,6 +15,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.junit.runner.Description;
+import org.junit.runner.Result;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +58,6 @@ public class MainController {
 
     private WeAssertRunner weAssertRunner;
 
-
     public void initialize() {
         this.webEngine = this.webView.getEngine();
         TreeItem<String> rootItem = new TreeItem<>("[No project selected]");
@@ -84,7 +85,13 @@ public class MainController {
                 this.weAssertRunner = new WeAssertRunnerImpl(
                         projectDirectory.getAbsolutePath(),
                         this.mavenBinary != null ? this.mavenBinary.getAbsolutePath() : "/usr/bin/mvn",
-                        new TestRunnerListener()
+                        new TestRunnerListener() {
+                            @Override
+                            public void testRunFinished(Result result) throws Exception {
+                                System.out.println(String.format("Run count: %s", result.getRunCount()));
+                                System.out.println(String.format("Failed tests: %s", result.getFailureCount()));
+                            }
+                        }
                 );
 
                 showTestFiles(this.projectDirectory);
