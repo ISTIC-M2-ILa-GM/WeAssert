@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>WeAssert</name>
 
-    <inceptionYear>2018</inceptionYear>
+    <inceptionYear>2019</inceptionYear>
 
     <organization>
         <name>GM</name>
@@ -136,6 +136,7 @@
                 <version>${jacoco.version}</version>
                 <configuration>
                     <excludes>
+                        <exclude>src/main/java/fr/istic/gm/weassert/test/model/*</exclude>
                         <exclude>**/config/**</exclude>
                         <exclude>**/*Exception.java</exclude>
                         <exclude>**/*Configuration.java</exclude>

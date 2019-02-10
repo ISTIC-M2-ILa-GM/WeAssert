@@ -1,7 +1,6 @@
 package fr.istic.gm.weassert.test.utils.impl;
 
 import fr.istic.gm.weassert.test.exception.WeAssertException;
-import fr.istic.gm.weassert.test.utils.ClassResolverUtil;
 import fr.istic.gm.weassert.test.utils.FileUtils;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import lombok.Getter;
