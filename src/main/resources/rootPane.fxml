@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.istic.gm.weassert.controller.MainController">
+    <children>
+        <AnchorPane minHeight="0.0" minWidth="0.0">
+         <children>
+            <HBox prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER" prefWidth="600.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="45.0">
+                           <children>
+                              <Button fx:id="browseButton2" mnemonicParsing="false" onAction="#selectMavenAction" text="Maven binary location">
+                                 <HBox.margin>
+                                    <Insets right="8.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="selectedMaven" text="[System default]" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="browseButton" mnemonicParsing="false" onAction="#browseAction" text="Browse Maven project">
+                                 <HBox.margin>
+                                    <Insets right="8.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="selectedFile" text="[No project selected]" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="8.0" top="8.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#generateAction" text="Generate assertions">
+                                 <HBox.margin>
+                                    <Insets right="8.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#testAction" text="Launch tests" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="8.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="52.0">
+                           <children>
+                              <ProgressBar prefWidth="600.0" progress="0.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <PieChart fx:id="testResultsChart" />
+               </children>
+            </HBox>
+         </children></AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TreeView fx:id="treeView" prefWidth="200.0" onMouseClicked="#itemClickedAction"></TreeView>
+                  <WebView fx:id="webView" prefHeight="-1.0" prefWidth="400.0" />
+               </children>
+            </HBox>
+         </children></AnchorPane>
+    </children>
+</VBox>
