@@ -70,7 +70,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
         try {
             BackupUtils backupUtils = new BackupUtilsImpl(mavenProjectPath);
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setValidating(false);
+            domFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document doc = builder.parse(new File(mavenProjectPath));
             NodeList nodes = doc.getElementsByTagName("dependencies");
