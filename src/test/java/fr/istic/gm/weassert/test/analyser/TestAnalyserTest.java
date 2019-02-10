@@ -1,6 +1,6 @@
 package fr.istic.gm.weassert.test.analyser;
 
-import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.generator.CodeWriter;
 import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
 import fr.istic.gm.weassert.test.compiler.SourceCodeCompiler;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;

@@ -1,6 +1,6 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.generator;
 
-import fr.istic.gm.weassert.test.impl.JavassitCodeWriter;
+import fr.istic.gm.weassert.test.generator.impl.JavassitCodeWriter;
 import org.junit.Before;
 import org.junit.Test;
 

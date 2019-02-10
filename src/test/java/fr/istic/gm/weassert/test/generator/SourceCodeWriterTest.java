@@ -1,16 +1,11 @@
-package fr.istic.gm.weassert.test;
+package fr.istic.gm.weassert.test.generator;
 
-import fr.istic.gm.weassert.test.impl.SourceCodeWriter;
+import fr.istic.gm.weassert.test.generator.impl.SourceCodeWriter;
 import fr.istic.gm.weassert.test.utils.BackupUtils;
-import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
-import fr.istic.gm.weassert.test.utils.ClassReaderFactoryTest;
 import fr.istic.gm.weassert.test.utils.impl.BackupUtilsImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.nio.file.Files;

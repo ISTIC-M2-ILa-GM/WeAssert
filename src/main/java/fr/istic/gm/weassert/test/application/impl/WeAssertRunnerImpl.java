@@ -1,6 +1,6 @@
 package fr.istic.gm.weassert.test.application.impl;
 
-import fr.istic.gm.weassert.test.AssertionGenerator;
+import fr.istic.gm.weassert.test.generator.AssertionGenerator;
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
 import fr.istic.gm.weassert.test.analyser.TestAnalyser;
 import fr.istic.gm.weassert.test.analyser.impl.CodeVisitorImpl;
@@ -9,8 +9,8 @@ import fr.istic.gm.weassert.test.analyser.impl.TestAnalyserImpl;
 import fr.istic.gm.weassert.test.application.WeAssertRunner;
 import fr.istic.gm.weassert.test.compiler.SourceCodeCompiler;
 import fr.istic.gm.weassert.test.compiler.impl.SourceCodeCompilerImpl;
-import fr.istic.gm.weassert.test.impl.AssertionGeneratorImpl;
-import fr.istic.gm.weassert.test.impl.SourceCodeWriter;
+import fr.istic.gm.weassert.test.generator.impl.AssertionGeneratorImpl;
+import fr.istic.gm.weassert.test.generator.impl.SourceCodeWriter;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.runner.TestRunnerListener;

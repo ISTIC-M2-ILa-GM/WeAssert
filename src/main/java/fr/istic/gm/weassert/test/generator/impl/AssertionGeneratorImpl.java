@@ -1,7 +1,7 @@
-package fr.istic.gm.weassert.test.impl;
+package fr.istic.gm.weassert.test.generator.impl;
 
-import fr.istic.gm.weassert.test.AssertionGenerator;
-import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.generator.AssertionGenerator;
+import fr.istic.gm.weassert.test.generator.CodeWriter;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package fr.istic.gm.weassert.test.impl;
+package fr.istic.gm.weassert.test.generator.impl;
 
-import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.generator.CodeWriter;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import javassist.CannotCompileException;
 import javassist.ClassPool;

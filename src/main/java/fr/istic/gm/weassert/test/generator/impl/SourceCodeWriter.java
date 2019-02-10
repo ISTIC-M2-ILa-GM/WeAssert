@@ -1,6 +1,6 @@
-package fr.istic.gm.weassert.test.impl;
+package fr.istic.gm.weassert.test.generator.impl;
 
-import fr.istic.gm.weassert.test.CodeWriter;
+import fr.istic.gm.weassert.test.generator.CodeWriter;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static fr.istic.gm.weassert.test.utils.ClassResolverUtil.mapClassToClassPath;
 
 @Slf4j
 @Getter
