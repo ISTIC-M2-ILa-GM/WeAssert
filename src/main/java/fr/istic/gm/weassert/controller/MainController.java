@@ -17,6 +17,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import lombok.AccessLevel;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.Result;
 
@@ -59,6 +61,7 @@ public class MainController {
 
     private WebEngine webEngine;
 
+    @Setter(AccessLevel.PACKAGE)
     private WeAssertRunner weAssertRunner;
 
     public void initialize() {
@@ -131,7 +134,7 @@ public class MainController {
         this.displaySourceCode(selectedItems.get(0).getValue().toString());
     }
 
-    public void displaySourceCode(String s) {
+    private void displaySourceCode(String s) {
         File sourceFile = new File(s);
         if (sourceFile.isFile() && !sourceFile.isDirectory()) {
             try {
@@ -146,7 +149,7 @@ public class MainController {
         }
     }
 
-    public void showTestFiles(File directory) {
+    private void showTestFiles(File directory) {
         this.treeView.getRoot().setValue(directory.getName());
         this.treeView.getRoot().getChildren().clear();
 
@@ -156,11 +159,5 @@ public class MainController {
                 .collect(Collectors.toList());
 
         this.treeView.getRoot().getChildren().addAll(collect);
-    }
-
-    public void addClassToTreeView(String className) {
-        TreeItem root = this.treeView.getRoot();
-        TreeItem<String> item = new TreeItem<>(className);
-        root.getChildren().add(item);
     }
 }
