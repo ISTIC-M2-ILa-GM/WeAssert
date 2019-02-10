@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fr.istic.gm.weassert.test.utils.ClassResolverUtil.mapClassToClassPath;
+
 @Slf4j
 @AllArgsConstructor
 public class TestAnalyserImpl implements TestAnalyser {
@@ -53,7 +55,7 @@ public class TestAnalyserImpl implements TestAnalyser {
 
     private Class<?> retrieveClass() {
         return urlClassLoaderWrapper.getClassList().stream()
-                .filter(c -> localVariableParser.getClazz().getName().equals(c.getName()))
+                .filter(c -> mapClassToClassPath(c).equals(mapClassToClassPath(localVariableParser.getClazz())))
                 .findFirst()
                 .orElseThrow(() -> new WeAssertException("Can't reload refreshed class"));
     }

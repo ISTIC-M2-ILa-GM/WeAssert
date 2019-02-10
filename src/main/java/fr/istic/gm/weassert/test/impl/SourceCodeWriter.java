@@ -3,6 +3,7 @@ package fr.istic.gm.weassert.test.impl;
 import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 
 import static fr.istic.gm.weassert.test.utils.ClassResolverUtil.mapClassToClassPath;
 
+@Slf4j
 @Getter
 public class SourceCodeWriter implements CodeWriter {
     public static final String CLASSNAME_REGEX = "^(private |public |protected |)(static |)class (\\w+)( \\{|)$";
@@ -118,7 +120,7 @@ public class SourceCodeWriter implements CodeWriter {
             writer.write(this.sourceCode);
             writer.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("Can't find the file to write", e);
         }
     }
 }

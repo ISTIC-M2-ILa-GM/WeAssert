@@ -2,10 +2,13 @@ package fr.istic.gm.weassert.test.impl;
 
 import fr.istic.gm.weassert.test.CodeWriter;
 import fr.istic.gm.weassert.test.exception.WeAssertException;
-import javassist.*;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
 import lombok.Getter;
 
-import java.io.IOException;
 import java.util.List;
 
 @Getter
@@ -30,11 +33,9 @@ public class JavassitCodeWriter implements CodeWriter {
     public void insertOne(String methodName, String desc, String code) {
         try {
             CtMethod method = this.classContainer.getMethod(methodName, desc);
-            try {
-                method.insertAfter(code);
-            } catch (CannotCompileException e) {
-                throw new WeAssertException("JavassitCodeWriter: could not insert code", e);
-            }
+            method.insertAfter(code);
+        } catch (CannotCompileException e) {
+            throw new WeAssertException("JavassitCodeWriter: could not insert code", e);
         } catch (NotFoundException e) {
             throw new WeAssertException(
                     String.format("JavassitCodeWriter: could not find method named %s", methodName), e

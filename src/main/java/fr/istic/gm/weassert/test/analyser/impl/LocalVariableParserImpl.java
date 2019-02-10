@@ -1,7 +1,6 @@
 package fr.istic.gm.weassert.test.analyser.impl;
 
 import fr.istic.gm.weassert.test.analyser.LocalVariableParser;
-import fr.istic.gm.weassert.test.exception.WeAssertException;
 import fr.istic.gm.weassert.test.model.LocalVariableParsed;
 import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;

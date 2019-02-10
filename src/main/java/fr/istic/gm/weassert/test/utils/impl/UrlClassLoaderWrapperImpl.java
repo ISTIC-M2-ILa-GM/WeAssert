@@ -1,6 +1,8 @@
 package fr.istic.gm.weassert.test.utils.impl;
 
 import fr.istic.gm.weassert.test.exception.WeAssertException;
+import fr.istic.gm.weassert.test.utils.ClassResolverUtil;
+import fr.istic.gm.weassert.test.utils.FileUtils;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -62,26 +64,10 @@ public class UrlClassLoaderWrapperImpl implements UrlClassLoaderWrapper {
     private List<String> mapPathsToFileNames(List<String> paths) {
         return paths.stream()
                 .map(File::new)
-                .map(this::findFilesFromFolder)
+                .map(FileUtils::findFilesFromFolder)
                 .flatMap(Collection::stream)
                 .map(File::getPath)
                 .filter(f -> f.endsWith(".class")).collect(Collectors.toList());
-    }
-
-    private List<File> findFilesFromFolder(File folder) {
-        List<File> files = new ArrayList<>();
-        File[] listFiles = folder.listFiles();
-        if (listFiles == null) {
-            return files;
-        }
-        for (File file : listFiles) {
-            if (file.isDirectory()) {
-                files.addAll(findFilesFromFolder(file));
-            } else {
-                files.add(file);
-            }
-        }
-        return files;
     }
 
     private URL mapToUrl(String a) {

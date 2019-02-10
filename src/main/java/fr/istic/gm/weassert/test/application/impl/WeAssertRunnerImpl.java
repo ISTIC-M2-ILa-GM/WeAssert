@@ -16,7 +16,6 @@ import fr.istic.gm.weassert.test.runner.TestRunner;
 import fr.istic.gm.weassert.test.runner.TestRunnerListener;
 import fr.istic.gm.weassert.test.runner.impl.TestRunnerImpl;
 import fr.istic.gm.weassert.test.utils.BackupUtils;
-import fr.istic.gm.weassert.test.utils.ClassReaderFactory;
 import fr.istic.gm.weassert.test.utils.UrlClassLoaderWrapper;
 import fr.istic.gm.weassert.test.utils.impl.BackupUtilsImpl;
 import fr.istic.gm.weassert.test.utils.impl.ClassReaderFactoryImpl;
