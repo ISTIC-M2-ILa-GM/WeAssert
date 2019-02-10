@@ -29,7 +29,7 @@ mvn install -DskipTests
 
 ## Execute the jar
 ```
-java -jar weassert.jar
+java -jar we-assert.jar
 ```
 
 ## How to use the project
