@@ -1,7 +1,5 @@
 package fr.istic.gm.weassert.test.generator;
 
-import fr.istic.gm.weassert.test.generator.AssertionGenerator;
-import fr.istic.gm.weassert.test.generator.CodeWriter;
 import fr.istic.gm.weassert.test.generator.impl.AssertionGeneratorImpl;
 import fr.istic.gm.weassert.test.model.TestAnalysed;
 import org.junit.Before;

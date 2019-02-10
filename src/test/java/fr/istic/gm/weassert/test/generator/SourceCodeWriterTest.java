@@ -12,7 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static fr.istic.gm.weassert.TestUtils.getAbsolutePath;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class SourceCodeWriterTest {
@@ -52,7 +54,7 @@ public class SourceCodeWriterTest {
         String code = "System.out.println(\"Hello World !\");";
         this.sourceCodeWriter.insertOne("testAge", "()V", code);
         this.sourceCodeWriter.writeAndCloseFile();
-        
+
         try {
             String readFile = new String(Files.readAllBytes(Paths.get(this.classPath)));
             assertEquals(this.sourceCodeWriter.getSourceCode(), readFile);

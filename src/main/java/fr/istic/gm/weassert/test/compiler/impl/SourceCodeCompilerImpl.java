@@ -80,7 +80,7 @@ public class SourceCodeCompilerImpl implements SourceCodeCompiler {
             Element version = doc.createElement("version");
             Text groupIdText = doc.createTextNode("fr.istic.gm");
             Text artifactIdText = doc.createTextNode("we-assert");
-            Text versionText = doc.createTextNode("1.0-SNAPSHOT");
+            Text versionText = doc.createTextNode("1.0");
             groupId.appendChild(groupIdText);
             artifactId.appendChild(artifactIdText);
             version.appendChild(versionText);
